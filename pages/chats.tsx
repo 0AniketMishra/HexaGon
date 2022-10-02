@@ -9,7 +9,7 @@ import { RecoilRoot } from "recoil"
 function chats() {
 
   return (
-    <div className=''>
+    <div className='bg-gray-100 h-screen'>
       <RecoilRoot>
         <ChatModal />
         <Header />

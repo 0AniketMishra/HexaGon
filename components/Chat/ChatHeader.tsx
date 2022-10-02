@@ -8,7 +8,7 @@ function ChatHeader() {
   const [Open, setOpen] = useRecoilState(chatModalState)
 
   return (
-    <div className='ml-2  p-2 sticky top-0 '>
+    <div className='ml-2  p-2 sticky top-0 bg-white'>
       <div className='flex'>
         <h1 className=' text-black font-bold justify-between'>Contacts - </h1>
         <h1 className="flex-1"></h1>
