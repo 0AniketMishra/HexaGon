@@ -19,7 +19,7 @@ function FollowModal() {
     const [uid, setUid] = useState("")
     const [username, setUsername] = useState("")
     const [photoUrl, setPhotoUrl] = useState("")
-    const [selectedTab, setSelectedTab] = useState("")
+    const [selectedTab, setSelectedTab] = useState("Followers")
 
     useEffect(() => onSnapshot(collection(db, 'users', pidValue, 'following'), (snapshot) =>
         setFollowing(snapshot.docs)), [db]

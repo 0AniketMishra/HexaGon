@@ -126,7 +126,7 @@ function Modal() {
                                             </div>
                                         )}
                                         {selectedVideo ? (
-                                            <div className='flex space-x-4 items-center' onClick={() => setSelectedFile(null)}>
+                                            <div className='flex space-x-4 items-center' onClick={() => setSelectedVideo(null)}>
                                                 <video src={selectedVideo} controls autoPlay muted
                                                     className="w-64 object-contain cursor-pointer rounded-lg mt-2"
                                                 />
@@ -143,7 +143,7 @@ function Modal() {
                                     </div>
 
                                     <div>
-                                        <input type="photo"
+                                        <input type="file"
                                             ref={filePickerRef}
                                             hidden
                                             onChange={addImageToPost}
