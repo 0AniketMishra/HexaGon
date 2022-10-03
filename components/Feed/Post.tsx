@@ -11,7 +11,7 @@ import { Menu, Transition } from '@headlessui/react'
 import Link from 'next/link'
 import toast from 'react-hot-toast'
 
-function Post({ id, username, userImg, img,vid, posttext, timestamp, uid }) {
+function Post({ id, img,vid, posttext, timestamp, uid }) {
 
   const [commentBoxVisible, setCommentBoxVisible] = useState<boolean>(false)
   const [user] = useAuthState(auth);
@@ -22,7 +22,7 @@ function Post({ id, username, userImg, img,vid, posttext, timestamp, uid }) {
   const [hasLiked, setHasLiked] = useState(false)
   const [verify, setVerify] = useState([])
   const [verified, setVerified] = useState(false)
-  const [userinfo, setUserinfo] = useState("")
+  const [userinfo, setUserinfo] = useState([])
   const userRef = collection(db, "users");
 
   useEffect(() => onSnapshot(collection(db, 'posts', id, 'likes'), (snapshot) =>
@@ -62,17 +62,15 @@ function Post({ id, username, userImg, img,vid, posttext, timestamp, uid }) {
 
   }
 
-  const getusername = async (e) => {
-    e.preventDefault();
-    const q = query(userRef, where("username", "==", username));
-    const querySnapshot = await getDocs(q);
-    querySnapshot.forEach((doc) => {
-      // doc.data() is never undefined for query doc snapshots
-      console.log(doc.id, " => ", doc.data().username);
-      setUserinfo(doc.data().username)
-    });
-
-  }
+  useEffect(
+    () =>
+      onSnapshot(query(collection(db, 'users',), where("uid", "==", uid)),
+        snapshot => {
+          setUserinfo(snapshot.docs)
+        }
+      ),
+    [db]
+  );
 
   const sendComment = async (e) => {
     e.preventDefault();
@@ -94,27 +92,35 @@ function Post({ id, username, userImg, img,vid, posttext, timestamp, uid }) {
     <div>
       <div className="mr-4  ml-4 lg:mr-2 lg:ml-2 mt-4 p-2 rounded-2xl  items-center bg-white   ">
         <div className="flex items-center ">
-          <div className="flex  items-center ">
-            <div>
-              <img src={userImg} alt="" className="w-12 h-12 rounded-full p-1 border mb-2" />
-            </div>
-            <div className=" items-center">
-              <div className="flex items-center">
-                <Link href={'/users/' + uid}>
-                  <a>
-                    <h1 className="text-sm font-bold ml-2 hover:text-blue-500 cursor-pointer " >{username}</h1>
-                  </a>
-                </Link>
-                {followers.length > 10 && (
-                  <img src="https://th.bing.com/th/id/R.9c88df48e24182943ba4945b92aa3704?rik=ng8QDZfIeaOAvg&riu=http%3a%2f%2fclipart-library.com%2fimages%2fgTeEegLRc.png&ehk=rFKFF6hVaGBnpA8yieOD6YZvrGTf6%2fiafNKrPlbD7a8%3d&risl=&pid=ImgRaw&r=0" className='w-4 ml-1 h-4' alt="Verified!" />
-                )}
-              </div>
-              <div className="ml-2 flex">
-                <h1 className="text-xs semi-font-bold">@{username.replace(/\s+/g, '').toLowerCase()}</h1>
-                <h1 className="text-xs ml-2">  <Moment fromNow>{timestamp?.toDate()}</Moment></h1>
-              </div>
-            </div>
-          </div>
+         
+            {userinfo.map(info => {
+              return(
+                 <div className="flex  items-center "key={info.id}>
+                <div>
+                  <img src={info.data().photoURL} alt="" className="w-12 h-12 rounded-full p-1 border mb-2" />
+                </div>
+                  <div className=" items-center">
+                    <div className="flex items-center">
+                      <Link href={'/users/' + uid}>
+                        <a>
+                          <h1 className="text-sm font-bold ml-2 hover:text-blue-500 cursor-pointer " >{info.data().username}</h1>
+                        </a>
+                      </Link>
+                      {followers.length > 10 && (
+                        <img src="https://th.bing.com/th/id/R.9c88df48e24182943ba4945b92aa3704?rik=ng8QDZfIeaOAvg&riu=http%3a%2f%2fclipart-library.com%2fimages%2fgTeEegLRc.png&ehk=rFKFF6hVaGBnpA8yieOD6YZvrGTf6%2fiafNKrPlbD7a8%3d&risl=&pid=ImgRaw&r=0" className='w-4 ml-1 h-4' alt="Verified!" />
+                      )}
+                    </div>
+                    <div className="ml-2 flex">
+                      <h1 className="text-xs semi-font-bold">@{user.displayName.replace(/\s+/g, '').toLowerCase()}</h1>
+                      <h1 className="text-xs ml-2">  <Moment fromNow>{timestamp?.toDate()}</Moment></h1>
+                    </div>
+                  </div>
+                </div>
+              )
+            })}
+
+           
+            
           <h1 className="flex-1"></h1>
 
           <Menu as="div" className="relative inline-block text-left">

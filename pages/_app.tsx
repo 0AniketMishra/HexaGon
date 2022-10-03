@@ -15,8 +15,9 @@ function MyApp({ Component, pageProps }: any) {
       db.collection('users').doc(user.uid).set({
         email: user.email,
         lastSeen: firebase.firestore.FieldValue.serverTimestamp(),
-        photoURL: user.photoURL,
-        username: user.displayName,
+        // photoURL: user.photoURL,
+        // username: user.displayName,
+        // about: "Hey There I am using HexaGon",
         phone: user.phoneNumber,
         uid: user.uid,
         slug: user.displayName.replace(/\s+/g, '').toLowerCase(),
