@@ -142,7 +142,7 @@ function CustomizeModal() {
 
                                       {userInfo.map(info => {
                                         return(
-                                            <div className='mt-4  items-center space-x-2'>
+                                            <div className='mt-4  items-center space-x-2' key={info.id}>
                                            
 
                                                 {selectedFile ? (

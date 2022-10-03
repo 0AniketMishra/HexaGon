@@ -124,7 +124,7 @@ const ContactUser = async () => {
             <CustomizeModal/>
            {userInfo.map(info => {
             return(
-               <main className='grid grid-cols-1   lg:grid-cols-12 lg:max-w-7xl mx-auto'>
+               <main className='grid grid-cols-1   lg:grid-cols-12 lg:max-w-7xl mx-auto' key={info.id}>
                    <section className='lg:col-span-3 md:col-span-0 hidden lg:inline-flex'>
                        <div className="fixed top-20">
                            <Sidebar />

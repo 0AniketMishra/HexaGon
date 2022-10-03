@@ -22,7 +22,7 @@ function MiniProfile() {
  <div>
   {userInfo.map(info => {
     return(
-      <div className="flex w-60 bg-white p-2 rounded-xl items-center justify-between  mr-4 ">
+      <div className="flex w-60 bg-white p-2 rounded-xl items-center justify-between  mr-4 " key={info.id}>
         <img src={info.data().photoURL} alt="" className="w-12 h-12 rounded-full border p-[2px]" />
         <div className="flex-1 ml-2">
           <h2 className="font-bold text-xs ">{info.data().username}</h2>
