@@ -83,23 +83,23 @@ function Chat() {
               </div>
             </div>
 
-            <div className=" overflow-y-scroll  scrollbar-hide h-[calc(100vh-15rem)] mb-4">
+            <div className=" overflow-y-scroll scroll-auto  scrollbar-hide h-[calc(100vh-15rem)] mb-4">
 
 
 
               {sentMessages.map(message => {
                 return (
-                  <div key={message.id} className="">
+                  <div key={message.id} className="mt-2">
                     {user.uid === message.data().uid ? (
                       <div key={message.id}>
                         <div className=" flex justify-end ">
-                          <h1 className='w-fit p-1 rounded-lg text-white font-semibold  mr-4 mt-2 bg-blue-900   '>{message.data().message}</h1>
+                          <h1 className='w-fit p-1 rounded-xl max-w-[50%] pl-2 pr-2 text-white font-bold  mr-4 mt-2 bg-blue-800   '>{message.data().message}</h1>
                         </div>
                       </div>
                     ) : (
                       <div >
                         <div className='flex justify-start'>
-                          <h1 className='w-fit text-white font-semibold bg-gray-500 p-1 rounded-lg ml-4 mt-2'>{message.data().message}</h1>
+                          <h1 className='w-fit  font-bold text-white bg-gray-600  pl-2 pr-2 p-1 rounded-xl ml-4 mt-2'>{message.data().message}</h1>
                         </div>
                       </div>
                     )}

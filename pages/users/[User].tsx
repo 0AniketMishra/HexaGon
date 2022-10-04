@@ -181,7 +181,7 @@ const ContactUser = async () => {
                                                        <PencilSquareIcon className="w-4 ml-1 cursor-pointer " onClick={() => setOpen(true)} />
                                                    )}
                                                </div>
-                                               <a className="text-gray-400  hover:text-blue-500" target="BLANK()">@{info.data().username.replace(/\s+/g, "").toLowerCase()}</a>
+                                               <a className="text-gray-400  hover:text-blue-500" target="BLANK()">{info.data().lowerUsername}</a>
                                            </div>
 
 

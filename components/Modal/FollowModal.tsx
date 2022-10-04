@@ -5,7 +5,7 @@ import { useRecoilState } from 'recoil'
 import { followState } from '../../atoms/followAtom'
 import { pidState } from '../../atoms/pidAtom'
 import { useEffect } from 'react'
-import { collection, doc, getDoc, onSnapshot } from 'firebase/firestore'
+import { collection, doc, getDoc, onSnapshot, query, where } from 'firebase/firestore'
 import { auth, db } from '../../firebase'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import { EllipsisHorizontalIcon, MagnifyingGlassIcon } from '@heroicons/react/24/outline'
@@ -16,9 +16,7 @@ function FollowModal() {
     const [pidValue, setPidValue] = useRecoilState(pidState)
     const [following, setFollowing] = useState([])
     const [followers, setFollowers] = useState([])
-    const [uid, setUid] = useState("")
-    const [username, setUsername] = useState("")
-    const [photoUrl, setPhotoUrl] = useState("")
+    const [userInfo, setUserInfo] = useState([])
     const [selectedTab, setSelectedTab] = useState("Followers")
 
     useEffect(() => onSnapshot(collection(db, 'users', pidValue, 'following'), (snapshot) =>
@@ -27,18 +25,20 @@ function FollowModal() {
     useEffect(() => onSnapshot(collection(db, 'users', pidValue, 'followers'), (snapshot) =>
         setFollowers(snapshot.docs)), [db]
     )
-    useEffect(() => {
-        ; (async () => {
-            const docRef = doc(db, 'users', pidValue);
-            const snapshots = await getDoc(docRef)
-            const username = snapshots.data().username
-            const photoURL = snapshots.data().photoURL
-            const uid = snapshots.data().uid
-            setUid(uid)
-            setUsername(username)
-            setPhotoUrl(photoURL)
-        })()
-    }, [])
+
+    
+  
+    useEffect(
+        () =>
+            onSnapshot(query(collection(db, 'users'), where("uid", "==", pidValue)),
+                snapshot => {
+                    setUserInfo(snapshot.docs)
+                }
+            ),
+        [db]
+
+    );
+   
     return (
         <div>
             <Transition appear show={followOpen} as={Fragment}>
@@ -71,13 +71,17 @@ function FollowModal() {
                                         as="h3"
                                         className="text-lg font-medium leading-6 text-gray-900"
                                     >
-                                        <div className='flex items-center space-x-2'>
-                                            <img src={photoUrl} alt="" className='w-10 h-10 rounded-full' />
-                                            <div>
-                                                <h1>{username}</h1>
-                                                <p className='text-sm text-gray-500'>@{username.replace(/\s+/g, '').toLowerCase()}</p>
+                                      {userInfo.map(info => {
+                                        return(
+                                            <div className='flex items-center space-x-2' key={info.id}>
+                                                <img src={info.data().photoURL} alt="" className='w-10 h-10 rounded-full' />
+                                                <div>
+                                                    <h1>{info.data().username}</h1>
+                                                    <p className='text-sm text-gray-500'>{info.data().lowerUsername}</p>
+                                                </div>
                                             </div>
-                                        </div>
+                                        )
+                                      })}
                                     </Dialog.Title>
                                    
                                     <ul className="nav nav-tabs flex  border-b-0 pl-0 mt-4 " id="tabs-tab"

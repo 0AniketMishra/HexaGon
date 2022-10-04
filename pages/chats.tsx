@@ -25,7 +25,7 @@ function chats() {
             
           </section>
 
-          <section className="hidden lg:inline-grid lg:cols-span-1">
+          <section className="hidden lg:inline-grid lg:cols-span-2">
             <div className="fixed top-20">
               <MiniProfile />
               <Suggestions />

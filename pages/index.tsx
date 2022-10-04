@@ -6,6 +6,8 @@ import { Toaster } from 'react-hot-toast'
 import Head from 'next/head'
 import StoryModal from '../components/Modal/StoryModal'
 import StoryPopupModal from '../components/Modal/StoryPopupModal'
+import CustomizeModal from '../components/Modal/CustomizeModal'
+import FollowModal from '../components/Modal/FollowModal'
 
 
 function Home() {
@@ -17,6 +19,8 @@ function Home() {
       </Head>
         <Header />
       <StoryModal />
+      <CustomizeModal/>
+
       <StoryPopupModal/>
         <Modal />
        

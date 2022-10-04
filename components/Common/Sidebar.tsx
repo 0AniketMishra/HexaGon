@@ -2,6 +2,8 @@ import { PencilSquareIcon, SparklesIcon } from "@heroicons/react/24/outline";
 import { collection, doc, onSnapshot, query, where } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { useRecoilState } from "recoil";
+import { CustomizeState } from "../../atoms/CustomizeAtom";
 import { auth, db } from "../../firebase";
 
 function Sidebar() {
@@ -10,6 +12,7 @@ function Sidebar() {
     const [followers, setFollowers] = useState([])
     const [following, setFollowing] = useState([])
     const [userInfo, setUserInfo] = useState([])
+    const [Open, setOpen] = useRecoilState(CustomizeState)
     
         useEffect(() => onSnapshot(collection(db, 'users', user.uid, 'followers'), (snapshot) =>
         setFollowers(snapshot.docs)), [db]
@@ -28,7 +31,7 @@ function Sidebar() {
     );
 
     return (
-        <div className="overflow-y-scroll h-[85vh] scrollbar-hide">
+        <div className="overflow-y-scroll h-[85vh]  scrollbar-hide">
             <div className=" ml-6 xl:ml-16 w-60 ">
               {userInfo.map(info => {
                 return(
@@ -40,9 +43,9 @@ function Sidebar() {
                         <div className="px-3 pb-6 pt-2 ml-4">
                             <div className="flex items-center ">
                                 <h3 className="text-black text-sm bold font-bold">{info.data().username}</h3>
-                                <PencilSquareIcon className="w-3 ml-1 cursor-pointer " /> 
+                                <PencilSquareIcon className="w-3 ml-1 cursor-pointer " onClick={() => setOpen(true)}/> 
                             </div>
-                            <p className="mt-2 font-sans font-light text-black">Hello, I am from another the other side!</p>
+                            <p className="mt-2 font-sans font-light text-black">{info.data().about}</p>
                         </div>
                         <div className="flex justify-center pb-3 text-black font-bold text-sm">
 

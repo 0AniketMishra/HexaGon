@@ -43,7 +43,8 @@ function CustomizeModal() {
         const docRef = await updateDoc(doc(db, "users", pidValue), {
             username: username,
             about: about
-        })
+        }
+)
 
         
 

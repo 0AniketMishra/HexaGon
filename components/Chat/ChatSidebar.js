@@ -32,7 +32,7 @@ function ChatSidebar() {
 
 
  <div>
-      <div className=' hidden lg:block mt-6 mb-8 ml-4  rounded-xl  overflow-y-scroll scrollbar-hide bg-white top-14  fixed bottom-0'>
+      <div className=' hidden lg:block mt-6 mb-8 ml-4 xl:w-64 rounded-xl  overflow-y-scroll scrollbar-hide bg-white top-14  fixed bottom-0'>
         <ChatHeader />
         <div className='h-[72vh]'>
           {contacts.map(contact => {
