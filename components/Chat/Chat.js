@@ -7,6 +7,7 @@ import { useRecoilState } from 'recoil';
 import { ChatAtomState } from '../../atoms/ChatAtom';
 import firebase from '@firebase/app-compat';
 import {orderBy } from '@firebase/firestore'
+import { brotliDecompress } from 'zlib';
 
 
 // Main Function Starts Here 
@@ -73,7 +74,7 @@ function Chat() {
          return( */}
               <div className="flex items-center space-x-2">
                 <img src={selectedPhotoURL} className="w-8 h-8 rounded-full" />
-                <span className=' font-bold '>{selectedChatData}</span>
+                <span className=' font-bold '>{selectedChatData}</span> 
               </div>
 
               <div className='flex space-x-4 items-center'>
@@ -116,7 +117,7 @@ function Chat() {
                     <PaperClipIcon className="w-6" />
                   </div>
                   <input value={message} onChange={e => setMessage(e.target.value)} placeholder='Enter your message here' className='w-full outline-none border bg-gray-200 rounded-lg text-black p-2 ml-2 mr-2 h-10 scrollbar-hide ' />
-                  <PaperAirplaneIcon onClick={sendMessage} type='submit' className='mr-2 h-8 cursor-pointer' />
+                  <PaperAirplaneIcon onClick={sendMessage} disabled={!message.trim()} type='submit' className='mr-2 h-8 cursor-pointer' />
                 </div>
               </div>
             </div>
@@ -171,15 +172,15 @@ function Chat() {
                 {user.uid === message.data().uid ? (
                   <div key={message.id}>
                     <div className=" flex justify-end ">
-                      <h1 className='w-fit p-1 rounded-lg text-white font-semibold  mr-4 mt-2 bg-blue-900   '>{message.data().message}</h1>
+                      <h1 className='w-fit p-1 rounded-xl max-w-[50%] pl-2 pr-2 text-white font-bold  mr-4 mt-2 bg-blue-800   '>{message.data().message}</h1>
                     </div>
                   </div>
                 ) : (
-                  <div >
-                    <div className='flex justify-start'>
-                      <h1 className='w-fit text-white font-semibold bg-gray-500 p-1 rounded-lg ml-4 mt-2'>{message.data().message}</h1>
+                    <div >
+                      <div className='flex justify-start'>
+                        <h1 className='w-fit  font-bold text-white bg-gray-600  pl-2 pr-2 p-1 rounded-xl ml-4 mt-2'>{message.data().message}</h1>
+                      </div>
                     </div>
-                  </div>
                 )}
               </div>
             )
@@ -201,7 +202,7 @@ function Chat() {
                 <PaperClipIcon className="w-6" />
               </div>
               <input value={message} onChange={e => setMessage(e.target.value)} placeholder='Enter your message here' className='w-full outline-none border bg-gray-200 rounded-lg text-black p-2 ml-2 mr-2 h-10 scrollbar-hide ' />
-              <PaperAirplaneIcon onClick={sendMessage} type='submit' className='mr-2 h-8 cursor-pointer' />
+                <PaperAirplaneIcon onClick={sendMessage} disabled={!message.trim()} type='submit' className='mr-2 h-8 cursor-pointer' />
             </div>
           </div>
         </div>

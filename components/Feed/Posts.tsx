@@ -31,6 +31,7 @@ function Posts() {
           vid={post.data().video}
           posttext={post.data().posttext}
           timestamp={post.data().timestamp}
+          lowerUsername={post.data().lowerUsername}
           uid={post.data().uid}
         />
       ))}

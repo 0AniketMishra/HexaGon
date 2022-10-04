@@ -3,15 +3,23 @@ import { useAuthState } from "react-firebase-hooks/auth"
 import { auth, db } from '../firebase'
 import firebase from '@firebase/app-compat';
 import "firebase/compat/firestore";
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Login from './login';
 import { RecoilRoot } from "recoil"
 import Loading from '../components/Common/Loading';
+import { collection, doc } from 'firebase/firestore';
 
 function MyApp({ Component, pageProps }: any) {
+
+  const [exists, setExists] = useState(false)
   const [user, loading] = useAuthState(auth)
+  const doesDocExist = (docID) => {
+    return db.collection("users").doc(user.uid).get().then((doc) => {
+       setExists(true)
+    })
+  }
   useEffect(() => {
-    if (user) {
+    if (user && exists===false) {
       db.collection('users').doc(user.uid).set({
         email: user.email,
         lastSeen: firebase.firestore.FieldValue.serverTimestamp(),
@@ -24,6 +32,8 @@ function MyApp({ Component, pageProps }: any) {
         lowerUsername: '@' + user.displayName.replace(/\s+/g, '').toLowerCase()
       },
         { merge: true });
+    } else{
+      
     }
   }, [user])
 

@@ -38,7 +38,8 @@ function Modal() {
         posttext: captionRef.current.value, 
         profileImg: user.photoURL, 
           timestamp: firebase.firestore.FieldValue.serverTimestamp(), 
-          uid: user.uid
+          uid: user.uid,
+          lowerUsername: '@'+user.displayName.replace(/\s+/g, '').toLowerCase()
       })
        
       console.log("New doc added wth ID", docRef.id); 
@@ -147,6 +148,7 @@ function Modal() {
                                             ref={filePickerRef}
                                             hidden
                                             onChange={addImageToPost}
+                                            multiple
                                         />
                                     </div>
                                     <div>

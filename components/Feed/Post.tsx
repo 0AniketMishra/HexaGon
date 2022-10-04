@@ -11,7 +11,7 @@ import { Menu, Transition } from '@headlessui/react'
 import Link from 'next/link'
 import toast from 'react-hot-toast'
 
-function Post({ id, img,vid, posttext, timestamp, uid }) {
+function Post({ id, img,vid, posttext, timestamp, uid, lowerUsername }) {
 
   const [commentBoxVisible, setCommentBoxVisible] = useState<boolean>(false)
   const [user] = useAuthState(auth);
@@ -111,7 +111,7 @@ function Post({ id, img,vid, posttext, timestamp, uid }) {
                       )}
                     </div>
                     <div className="ml-2 flex">
-                      <h1 className="text-xs semi-font-bold">@{user.displayName.replace(/\s+/g, '').toLowerCase()}</h1>
+                      <h1 className="text-xs semi-font-bold">{lowerUsername}</h1>
                       <h1 className="text-xs ml-2">  <Moment fromNow>{timestamp?.toDate()}</Moment></h1>
                     </div>
                   </div>
@@ -191,9 +191,9 @@ function Post({ id, img,vid, posttext, timestamp, uid }) {
         <div className="ml-4  mt-2 md:mr-4 ">
           <h1 className="lg:w-[90%] mb-4 mt-4 ml-4 text-lg ">{posttext}</h1>
           <div className="flex items-center space-x-4 p-2 justify-left" >
-            <img src={img} alt="" className='w-96 rounded-lg ' />
+            <img src={img} alt="" className='max-h-96 rounded-lg ' />
             {vid && (
-              <video src={vid} controls autoPlay muted loop className="rounded-lg " />
+              <video src={vid} controls autoPlay muted loop className="rounded-lg max-h-[34rem]" />
             )}
 
           </div>

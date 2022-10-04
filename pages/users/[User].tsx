@@ -17,12 +17,15 @@ import FollowModal from '../../components/Modal/FollowModal';
 import { pidState } from '../../atoms/pidAtom';
 import {CustomizeState} from '../../atoms/CustomizeAtom'
 import CustomizeModal from '../../components/Modal/CustomizeModal';
+import  Link  from 'next/link';
 import { userInfo } from 'os';
+import { ChatAtomState } from '../../atoms/ChatAtom';
 
 
 const User = ({
     id,
 }) => {
+    const [selectedChat, setSelectedChat] = useRecoilState(ChatAtomState)
     const router = useRouter()
     const pid  = router.query.User as string
     const [username, setUsername] = useState("")
@@ -105,6 +108,8 @@ const ContactUser = async () => {
         uid: uid, 
         photoURL: photoURL,
     }, {merge: true});
+   
+
 }
     useEffect(
         () =>
@@ -146,8 +151,11 @@ const ContactUser = async () => {
                                        {pid != user.uid && (
                                            <div className='flex space-x-4 '>
                                                {/* <EllipsisHorizontalCircleIcon className="w-8  mt-8 h-8 bg-white rounded-full"/> */}
-                                               <UserPlusIcon onClick={ContactUser} className=' border-blue-500 border bg-blue-500 text-white w-10 h-10  mt-7 cursor-pointer  rounded-full p-2  ' />
-
+                                                <Link href='/chats'>
+                                                         <a>
+                                                        <UserPlusIcon onClick={ContactUser} className=' border-blue-500 border bg-blue-500 text-white w-10 h-10  mt-7 cursor-pointer  rounded-full p-2  ' />
+                                                           </a>
+                                                </Link>
                                                <div className='flex' >
                                                    {hasFollowed ? (
                                                        <button onClick={followUser} className='hover:bg-white border-blue-500 border bg-blue-500 text-white w-24 h-10  mt-7 hover:text-blue-500  rounded-full p-1 hover:border-blue-500 font-bold '>Following</button>

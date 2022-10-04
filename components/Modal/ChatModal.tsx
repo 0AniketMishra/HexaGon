@@ -64,9 +64,9 @@ function ChatModal() {
                                                     </div>
                                                     <h1 className="flex-1"></h1>
                                                     <div>
-                                                        <Link href={'/users/' + uid}>
+                                                        <Link href={'/users/' + user.data().uid}>
                                                             <a>
-                                                                <button  className='text-xs font-bold bg-blue-900 text-white pb-1 pt-1 rounded-lg pl-2 pr-2'>Message</button>
+                                                                <button  className='text-xs font-bold bg-blue-900 text-white pb-1 pt-1 rounded-lg pl-2 pr-2'>View Profile</button>
 
                                                             </a>
                                                         </Link>
