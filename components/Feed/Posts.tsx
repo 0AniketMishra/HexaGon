@@ -33,6 +33,7 @@ function Posts() {
           timestamp={post.data().timestamp}
           lowerUsername={post.data().lowerUsername}
           uid={post.data().uid}
+        
         />
       ))}
     </div>
