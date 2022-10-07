@@ -55,6 +55,17 @@ function Modal() {
            { "id:": 25, 'emoji': '😐' },
         { "id:": 26, 'emoji': '😑' },
         { "id:": 27, 'emoji': '😶' },
+        { "id:": 28, 'emoji': '🙄' },
+        { "id:": 29, 'emoji': '😏' },
+        { "id:": 30, 'emoji': '😣' },
+        { "id:": 31, 'emoji': '😥' },
+        { "id:": 32, 'emoji': '😮' },
+        { "id:": 33, 'emoji': '🤐' },
+        { "id:": 34, 'emoji': '😯' },
+        { "id:": 35, 'emoji': '😪' },
+        { "id:": 36, 'emoji': '😫' },
+
+
 
          ])
     const [emoji, setEmoji] = useState("")
@@ -226,7 +237,7 @@ function Modal() {
                                                 return (
                                                     <div key={emoji.id} className=" cursor-pointer w-50">
                                                         <ul>
-                                                            <li onClick={() => setCaptionRef(captionRef + emoji.emoji)} className="text-lg">{emoji.emoji}</li>
+                                                            <li onClick={() => setCaptionRef(captionRef + emoji.emoji)} className="text-xl">{emoji.emoji}</li>
                                                         </ul>
                                                     </div>
                                                 )

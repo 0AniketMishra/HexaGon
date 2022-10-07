@@ -1,5 +1,5 @@
 import { ArrowLeftIcon, EllipsisVerticalIcon, FaceSmileIcon, PaperAirplaneIcon, PaperClipIcon, PhoneIcon, VideoCameraIcon } from '@heroicons/react/24/outline'
-import { addDoc, collection, doc, getDoc, getDocs, onSnapshot, query, where } from 'firebase/firestore'
+import { addDoc, collection, doc, getDoc, getDocs, onSnapshot, query, where, updateDoc, setDoc } from 'firebase/firestore'
 import React, { useEffect, useState } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth, db } from '../../firebase'
@@ -7,7 +7,6 @@ import { useRecoilState } from 'recoil';
 import { ChatAtomState } from '../../atoms/ChatAtom';
 import firebase from '@firebase/app-compat';
 import {orderBy } from '@firebase/firestore'
-import { brotliDecompress } from 'zlib';
 
 
 // Main Function Starts Here 
@@ -25,25 +24,30 @@ function Chat() {
     e.preventDefault();
     const messagetosend = message;
     setMessage('')
-
-  
-     
-
-    await addDoc(collection(db, "userChat", user.uid, "Contacts", selectedChat, 'messages'), {
-      message: messagetosend,
-      username: user.displayName,
-      userImage: user.photoURL,
-      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-      uid: user.uid
-    })
-    await addDoc(collection(db, "userChat", selectedChat, "Contacts", user.uid, 'messages'), {
-      message: messagetosend,
-      username: user.displayName,
-      userImage: user.photoURL,
-      timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-      uid: user.uid
-    })
+      if(messagetosend !== "" && " "){
+        await addDoc(collection(db, "userChat", user.uid, "Contacts", selectedChat, 'messages'), {
+          message: messagetosend,
+          username: user.displayName,
+          userImage: user.photoURL,
+          timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+          uid: user.uid
+        })
+        await addDoc(collection(db, "userChat", selectedChat, "Contacts", user.uid, 'messages'), {
+          message: messagetosend,
+          username: user.displayName,
+          userImage: user.photoURL,
+          timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+          uid: user.uid
+        })
+      }
+    // await setDoc(collection(db,'userChat', selectedChat, "Contacts", user.uid,'latestMessage'),{
+    //   latestMessage: messagetosend,
+    //   username: user.displayName,
+    //   timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+    //   uid: user.uid
+    // })
   }
+ 
    onSnapshot(query(collection(db, 'userChat', user.uid, "Contacts", selectedChat, "messages"), orderBy('timestamp')),
         snapshot => {
           setSentMessages(snapshot.docs)
@@ -117,7 +121,7 @@ function Chat() {
                     <PaperClipIcon className="w-6" />
                   </div>
                   <input value={message} onChange={e => setMessage(e.target.value)} placeholder='Enter your message here' className='w-full outline-none border bg-gray-200 rounded-lg text-black p-2 ml-2 mr-2 h-10 scrollbar-hide ' />
-                  <PaperAirplaneIcon onClick={sendMessage} disabled={!message.trim()} type='submit' className='mr-2 h-8 cursor-pointer' />
+                  <PaperAirplaneIcon onClick={sendMessage} disabled={!message.trim()}  type='submit' className='mr-2 h-8 cursor-pointer' />
                 </div>
               </div>
             </div>
@@ -202,7 +206,7 @@ function Chat() {
                 <PaperClipIcon className="w-6" />
               </div>
               <input value={message} onChange={e => setMessage(e.target.value)} placeholder='Enter your message here' className='w-full outline-none border bg-gray-200 rounded-lg text-black p-2 ml-2 mr-2 h-10 scrollbar-hide ' />
-                <PaperAirplaneIcon onClick={sendMessage} disabled={!message.trim()} type='submit' className='mr-2 h-8 cursor-pointer' />
+                <PaperAirplaneIcon  onClick={sendMessage} disabled={!message.trim()} type='submit' className='mr-2 h-8 cursor-pointer' />
             </div>
           </div>
         </div>

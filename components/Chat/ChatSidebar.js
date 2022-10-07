@@ -62,7 +62,7 @@ function ChatSidebar() {
                   </div>
                   <div className=''>
                     <h1 className='ml-1 font-bold text-black '>{contact.data().username}</h1>
-                    <h1 className='ml-1 text-black text-sm truncate w-40 '>This is a sample of a latest message </h1>
+                    <h1 className='ml-1 text-black text-sm truncate  '>This is a sample of a latest message </h1>
                   </div>
                 </div>
               )

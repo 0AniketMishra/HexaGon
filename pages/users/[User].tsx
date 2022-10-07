@@ -7,7 +7,7 @@ import MiniProfile from '../../components/Common/MiniProfile';
 import Suggestions from '../../components/Common/Suggestions';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../../firebase';
-import { BellIcon, EllipsisHorizontalCircleIcon, EyeIcon, PencilIcon, PencilSquareIcon, UserPlusIcon } from '@heroicons/react/24/outline';
+import { BellIcon, EllipsisHorizontalCircleIcon, EllipsisHorizontalIcon, EyeIcon, PencilIcon, PencilSquareIcon, UserPlusIcon } from '@heroicons/react/24/outline';
 import Moment from 'react-moment';
 import { Tab } from '@headlessui/react';
 import Sidebar from '../../components/Common/Sidebar';
@@ -20,6 +20,9 @@ import CustomizeModal from '../../components/Modal/CustomizeModal';
 import  Link  from 'next/link';
 import { userInfo } from 'os';
 import { ChatAtomState } from '../../atoms/ChatAtom';
+import { Fragment } from 'react'
+import { Menu, Transition } from '@headlessui/react'
+import toast from 'react-hot-toast';
 
 
 const User = ({
@@ -40,6 +43,9 @@ const User = ({
     const [userInfo, setUserInfo] = useState([])
     const [followOpen, setFollowOpen] = useRecoilState(followState)
     const [pidValue, setPidValue] = useRecoilState(pidState)
+    const [userPosts, setUserPosts] = useState([])
+    const [selectedTab, setSelectedTab] = useState("")
+    const [userLikes, setUserLikes] = useState([])
 
       useEffect(() => {
           ;(async () => {
@@ -111,6 +117,18 @@ const ContactUser = async () => {
    
 
 }
+    const deletePost = async (e) => {
+        e.preventDefault();
+        if (uid == user.uid) {
+            const refreshToast = toast.loading("Deleting Post...")
+            await deleteDoc(doc(db, 'posts', id,));
+            toast.success('Post Deleted Successfully', {
+                id: refreshToast
+            })
+        }
+
+    }
+
     useEffect(
         () =>
             onSnapshot(query(collection(db, 'users',), where("uid", "==", pid)),
@@ -120,22 +138,43 @@ const ContactUser = async () => {
             ),
         [db]
     );
+    useEffect(
+        () =>
+            onSnapshot(query(collection(db, 'posts',), where("uid", "==", pid)),
+                snapshot => {
+                    setUserPosts(snapshot.docs)
+                }
+            ),
+        [db]
+    );
+    useEffect(
+        () =>
+            onSnapshot(query(collection(db, 'posts',id, "likes",pid)),
+                snapshot => {
+                    setUserLikes(snapshot.docs)
+                }
+            ),
+        [db]
+    );
     const [Open, setOpen] = useRecoilState(CustomizeState)
 
+    function classNames(...classes) {
+        return classes.filter(Boolean).join(' ')
+    }
     return( 
-      <div className='bg-gray-100'>
+        <div className='bg-gray-100 h-screen overflow-y-scroll scrollbar-hide '>
             <Header />
             <FollowModal/>
             <CustomizeModal/>
            {userInfo.map(info => {
             return(
-               <main className='grid grid-cols-1   lg:grid-cols-12 lg:max-w-7xl mx-auto' key={info.id}>
+               <main className='grid grid-cols-1  lg:grid-cols-12 lg:max-w-7xl mx-auto' key={info.id}>
                    <section className='lg:col-span-3 md:col-span-0 hidden lg:inline-flex'>
                        <div className="fixed top-20">
                            <Sidebar />
                        </div>
                    </section>
-                   <section className="lg:col-span-6 md:col-span-6 w-[90%] mx-auto h-screen">
+                   <section className="lg:col-span-6 md:col-span-6 w-[90%] mx-auto ">
                        <div className='rounded-xl'>
                            <div className="   mt-6   flex   justify-center  ">
                                <div className=" w-full rounded-xl  bg-white ">
@@ -207,15 +246,145 @@ const ContactUser = async () => {
                                                <h1>{followers.length} Followers</h1>
                                                <h1>{following.length} Following</h1>
                                            </div>
-
+                                            {/* <h1 className='font-bold'>Posts by {info.data().username} - </h1> */}
                                        </div>
 
 
 
-                                       <div className="flex mt-6 ">
+                                       <div className="  flex mt-6 ml-4 mr-4 mb-4">
+                                            {selectedTab === "posts" ? (
+                                                <div className='w-1/2'>
+                                                    <h1 onClick={() => setSelectedTab('posts')} className=' text-center border-b pb-2 pt-2 border bg-gray-100  cursor-pointer'>Posts by {info.data().username}</h1>
+                                              </div>
+                                             ):(
+                                                    <div className='w-1/2'>
+                                                        <h1 onClick={() => setSelectedTab('posts')} className='text-center border-b pb-2 pt-2 border hover:bg-gray-100  cursor-pointer'>Posts by {info.data().username}</h1>
+                                                    </div>
+                                            )
+                                        }
+                                           {selectedTab === "likes" ? (
+                                             <div className='w-1/2'>
+                                                    <h1 onClick={() => setSelectedTab("likes")} className=' text-center border-b pb-2 pt-2 border bg-gray-100  cursor-pointer'>Likes by {info.data().username}</h1>
+                                             </div>
+                                           ):(
+                                                    <div className='w-1/2'>
+                                                        <h1 onClick={() => setSelectedTab("likes")} className=' text-center border-b pb-2 pt-2 border hover:bg-gray-100  cursor-pointer'>Likes by {info.data().username}</h1>
+                                                    </div>
 
-
+                                           )}
                                        </div>
+                                         {selectedTab === "posts" &&(
+                                            <div className=''>
+                                                {userPosts.map(post => {
+                                                    return(
+                                                        <div className='mt-4 ml-4 mr-4 mb-4  p-1 rounded-lg '>
+                                                            <div className='flex space-x-2 items-center'>
+                                                                <div><img src={post.data().profileImg} alt="" className='w-10 h-10  p-1 rounded-full'/></div>
+                                                                <div>
+                                                                    <h1 className='font-bold'>{post.data().username}</h1>
+                                                                    <div className='flex space-x-2'>
+                                                                        <p className='text-sm'>{post.data().lowerUsername+" "+"|"}</p>
+                                                                        <p className="text-sm">  <Moment fromNow>{post.data().timestamp?.toDate()}</Moment></p>
+                                                                    </div>
+                                                                </div>
+                                                                <h1 className='flex-1'></h1>
+                                                                <div className=''>
+                                                                    <Menu as="div" className="relative inline-block text-left">
+                                                                        <div>
+                                                                            <Menu.Button className="inline-flex  outline-none  px-4 py-2 text-sm font-medium   ">
+                                                                                {/* Options
+                // <ChevronDownIcon className="-mr-1 ml-2 h-5 w-5" aria-hidden="true" /> */}
+                                                                                <EllipsisHorizontalIcon className="h-6   hover:scale-125   transition-all duration-150 ease-out" />
+                                                                            </Menu.Button>
+                                                                        </div>
+                                                                        <Transition as={Fragment} enter="transition ease-out duration-100" enterFrom="transform opacity-0 scale-95" enterTo="transform opacity-100 scale-100" leave="transition ease-in duration-75" leaveFrom="transform opacity-100 scale-100" leaveTo="transform opacity-0 scale-95">
+                                                                            <Menu.Items className="absolute right-0 z-10 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                                                                                <div className="py-1">
+                                                                                    <Menu.Item>
+                                                                                        {({ active }) => (
+                                                                                            <a
+                                                                                                href="#"
+                                                                                                className={classNames(
+                                                                                                    active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'block px-4 py-2 text-sm'
+                                                                                                )}>
+                                                                                                Account settings
+                                                                                            </a>
+                                                                                        )}
+                                                                                    </Menu.Item>
+                                                                                    <Menu.Item>
+                                                                                        {({ active }) => (
+                                                                                            <a
+                                                                                                href="#"
+                                                                                                className={classNames(
+                                                                                                    active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'block px-4 py-2 text-sm'
+                                                                                                )}>
+                                                                                                Support
+                                                                                            </a>
+                                                                                        )}
+                                                                                    </Menu.Item>
+                                                                                    <Menu.Item>
+                                                                                        {({ active }) => (
+                                                                                            <a
+                                                                                                href="#"
+                                                                                                className={classNames(
+                                                                                                    active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'block px-4 py-2 text-sm'
+                                                                                                )}>
+                                                                                                License
+                                                                                            </a>
+                                                                                        )}
+                                                                                    </Menu.Item>
+                                                                                    <form method="POST" action="#">
+                                                                                        {uid == user.uid && (
+                                                                                            <Menu.Item>
+                                                                                                {({ active }) => (
+                                                                                                    <button
+                                                                                                        type="submit" onClick={deletePost}
+                                                                                                        className={classNames(
+                                                                                                            active ? 'bg-gray-100 text-gray-900' : 'text-red-700', 'block w-full px-4 py-2 text-left text-sm'
+                                                                                                        )}>
+                                                                                                        Delete Post
+                                                                                                    </button>
+                                                                                                )}
+                                                                                            </Menu.Item>
+                                                                                        )}
+                                                                                    </form>
+                                                                                </div>
+                                                                            </Menu.Items>
+                                                                        </Transition>
+                                                                    </Menu>
+                                                                </div>
+                                                            </div>
+                                                            <div className='ml-12 mt-2 mb-4'>
+                                                              <p>{post.data().posttext}</p>
+                                                            </div>
+                                                            <div className='max-w-48 '>
+                                                                {post.data().image &&(
+                                                                    <img src={post.data().image} alt="" className='w-96 ml-12 rounded-lg shadow-md'/>
+                                                                )}
+                                                            {post.data().video &&(
+                                                                    <video muted autoPlay loop controls src={post.data().video} className="rounded-lg w-72 ml-12 shadow-md"></video>
+                                                            )}
+                                                            </div>
+                                                            <div>
+
+                                                            </div>
+                                                        </div>
+                                                    )
+                                                })}
+                                            </div>
+                                         )}
+
+                                         {selectedTab === "likes"&&(
+                                            <div>
+                                                {userLikes.map(likes => {
+                                                    return(
+                                                        <div className='' key={likes.data().username}>
+                                                            <h1>{}</h1>
+                                                        </div>
+                                                    )
+                                                })}
+                                            </div>
+                                         )}
                                    </div>
                                </div>
                            </div>

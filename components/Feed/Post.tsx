@@ -96,9 +96,9 @@ function Post({ id, img,vid, posttext, timestamp, uid, lowerUsername }) {
             {userinfo.map(info => {
               return(
                  <div className="flex  items-center "key={info.id}>
-                <div>
+                  <div>
                   <img src={info.data().photoURL} alt="" className="w-12 h-12 rounded-full p-1 border mb-2" />
-                </div>
+                  </div>
                   <div className=" items-center">
                     <div className="flex items-center">
                       <Link href={'/users/' + uid}>
@@ -139,7 +139,7 @@ function Post({ id, img,vid, posttext, timestamp, uid, lowerUsername }) {
                       <a
                         href="#"
                         className={classNames(
-                          active ? 'bg-gray-100 text-gray-900' : 'text-gray-700','block px-4 py-2 text-sm'
+                          active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'block px-4 py-2 text-sm'
                         )}>
                         Account settings
                       </a>
@@ -150,7 +150,7 @@ function Post({ id, img,vid, posttext, timestamp, uid, lowerUsername }) {
                       <a
                         href="#"
                         className={classNames(
-                          active ? 'bg-gray-100 text-gray-900' : 'text-gray-700','block px-4 py-2 text-sm'
+                          active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'block px-4 py-2 text-sm'
                         )}>
                         Support
                       </a>
@@ -161,7 +161,7 @@ function Post({ id, img,vid, posttext, timestamp, uid, lowerUsername }) {
                       <a
                         href="#"
                         className={classNames(
-                          active ? 'bg-gray-100 text-gray-900' : 'text-gray-700','block px-4 py-2 text-sm'
+                          active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'block px-4 py-2 text-sm'
                         )}>
                         License
                       </a>
@@ -174,7 +174,7 @@ function Post({ id, img,vid, posttext, timestamp, uid, lowerUsername }) {
                           <button
                             type="submit" onClick={deletePost}
                             className={classNames(
-                              active ? 'bg-gray-100 text-gray-900' : 'text-red-700','block w-full px-4 py-2 text-left text-sm'
+                              active ? 'bg-gray-100 text-gray-900' : 'text-red-700', 'block w-full px-4 py-2 text-left text-sm'
                             )}>
                             Delete Post
                           </button>
