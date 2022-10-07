@@ -147,15 +147,15 @@ const ContactUser = async () => {
             ),
         [db]
     );
-    useEffect(
-        () =>
-            onSnapshot(query(collection(db, 'posts',id, "likes",pid)),
-                snapshot => {
-                    setUserLikes(snapshot.docs)
-                }
-            ),
-        [db]
-    );
+    // useEffect(
+    //     () =>
+    //         onSnapshot(query(collection(db, 'posts',id, "likes",pid)),
+    //             snapshot => {
+    //                 setUserLikes(snapshot.docs)
+    //             }
+    //         ),
+    //     [db]
+    // );
     const [Open, setOpen] = useRecoilState(CustomizeState)
 
     function classNames(...classes) {
