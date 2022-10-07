@@ -277,7 +277,7 @@ const ContactUser = async () => {
                                             <div className=''>
                                                 {userPosts.map(post => {
                                                     return(
-                                                        <div className='mt-4 ml-4 mr-4 mb-4  p-1 rounded-lg '>
+                                                        <div className='mt-4 ml-4 mr-4 mb-4  p-1 rounded-lg ' key={post.id}>
                                                             <div className='flex space-x-2 items-center'>
                                                                 <div><img src={post.data().profileImg} alt="" className='w-10 h-10  p-1 rounded-full'/></div>
                                                                 <div>
@@ -378,8 +378,8 @@ const ContactUser = async () => {
                                             <div>
                                                 {userLikes.map(likes => {
                                                     return(
-                                                        <div className='' key={likes.data().username}>
-                                                            <h1>{}</h1>
+                                                        <div className='' key={likes.id}>
+                                                            <h1>{likes.data().username}</h1>
                                                         </div>
                                                     )
                                                 })}
