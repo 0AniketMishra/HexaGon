@@ -74,9 +74,10 @@ function StoryPopupModal({id}) {
                                   >
                                       {selectedStory}
                                   </Dialog.Title> */}
-                                  <div className="hidden xl:inline-flex">
+                                  <div className=" ">
                                       <Stories stories={story}  width={300} height={500} defaultInterval={1500} onStoryEnd={() => setOpen(false)} />
                                   </div>
+                                 
 
                                   <div className="">
                                       {/* <button
