@@ -4,15 +4,40 @@ import { StoryModalAtomState } from '../../atoms/StoryModalAtom'
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useState } from 'react'
 import { SelectedStoryAtom } from '../../atoms/SelectedStoryAtom'
-import { collection, onSnapshot, query, where } from 'firebase/firestore'
-import { db } from '../../firebase'
+import { collection, onSnapshot, orderBy, query, where } from 'firebase/firestore'
+import { auth, db } from '../../firebase'
+import { useAuthState } from 'react-firebase-hooks/auth'
+import Stories from 'react-insta-stories';
 
-function StoryPopupModal() {
+function StoryPopupModal({id}) {
+    const [user] = useAuthState(auth);
     const [Open, setOpen] = useRecoilState(StoryModalAtomState)
     const [selectedStory, setSelectedStory] = useRecoilState(SelectedStoryAtom)
     const [data, setData] = useState([])
+    const [storyID, setStoryID] = useState([])
+    const [storyImage ,setStoryImage] = useState([])
 
    
+
+
+    useEffect(() => onSnapshot(query(collection(db, 'stories', id, 'updates')), (snapshot) =>
+        setData(snapshot.docs)), [db, id]
+    )
+
+    
+    const story = [
+        {
+            url: 'https://th.bing.com/th/id/OIP.MBLGS3hfrLkuT5PoZ62msgHaEK?pid=ImgDet&rs=1',
+            duration: 5000,
+           
+            header: {
+                heading: 'Elon Musk',
+                subheading: 'Posted 30m ago',
+                profileImage: 'https://picsum.photos/100/100',
+            },
+        },
+    ]
+
   return (
     <div>
         
@@ -32,7 +57,7 @@ function StoryPopupModal() {
                   </Transition.Child>
 
                   <div className="fixed inset-0 overflow-y-auto">
-                      <div className="flex min-h-full items-center justify-center p-4 text-center">
+                      <div className="flex min-h-full items-center justify-center  text-center">
                           <Transition.Child
                               as={Fragment}
                               enter="ease-out duration-300"
@@ -42,31 +67,25 @@ function StoryPopupModal() {
                               leaveFrom="opacity-100 scale-100"
                               leaveTo="opacity-0 scale-95"
                           >
-                              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
-                                  <Dialog.Title
+                              <Dialog.Panel className=" max-w-md transform overflow-hidden rounded-2xl bg-white  text-left align-end shadow-xl transition-all">
+                                  {/* <Dialog.Title
                                       as="h3"
                                       className="text-lg font-medium leading-6 text-gray-900"
                                   >
                                       {selectedStory}
-                                  </Dialog.Title>
-                                  <div className="mt-2">
-                                     {data.map(info => {
-                                       return(
-                                           <div key={info.id}>
-                                               <p>{info.data().username}</p>
-                                           </div>
-                                       )
-                                     })}
+                                  </Dialog.Title> */}
+                                  <div className="hidden xl:inline-flex">
+                                      <Stories stories={story}  width={300} height={500} defaultInterval={1500} onStoryEnd={() => setOpen(false)} />
                                   </div>
 
-                                  <div className="mt-4">
-                                      <button
+                                  <div className="">
+                                      {/* <button
                                           type="button"
-                                          className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                                          className="inline-flex justify-center rounded-md border border-transparent bg-blue-100  text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                                           onClick={() => setOpen(false)}
                                       >
-                                          Got it, thanks!
-                                      </button>
+                                          Close
+                                      </button> */}
                                   </div>
                               </Dialog.Panel>
                           </Transition.Child>

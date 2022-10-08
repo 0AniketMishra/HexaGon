@@ -15,6 +15,6 @@
     "jsx": "preserve",
     "incremental": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "components/Chat_Sidebar.js", "components/Loading.js", "components/Feed/Post.tsx", "pages/users/[User].tsxx", "components/Chat/ChatSidebar.js", "components/Chat/Chat.js", "pages/users/[User].tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "components/Chat_Sidebar.js", "components/Loading.js", "components/Feed/Post.tsx", "pages/users/[User].tsxx", "components/Chat/ChatSidebar.js", "components/Chat/Chat.js", "pages/users/[User].tsx", "components/Modal/StoryPopupModal.js"],
   "exclude": ["node_modules"]
 }

@@ -3,10 +3,14 @@ import Post from './Post'
 import {onSnapshot, collection, query, orderBy} from '@firebase/firestore'
 import { db } from '../../firebase';
 import firebase from 'firebase/compat';
+import StoryPopupModal from '../Modal/StoryPopupModal';
 
 function Posts() {
 
   const [posts , setPosts] = useState([]);
+  const [stories, setStories] = useState([])
+  const [storyID, setStoryID] = useState([])
+
   useEffect(
     () => 
  onSnapshot(query(collection(db, 'posts'), orderBy('timestamp', 'desc')),
@@ -14,6 +18,15 @@ function Posts() {
       setPosts(snapshot.docs)
     }
     ),
+    [db]
+  );
+  useEffect(
+    () =>
+      onSnapshot(query(collection(db, 'stories'), orderBy('timestamp')),
+        snapshot => {
+          setStories(snapshot.docs)
+        }
+      ),
     [db]
   );
 
@@ -36,6 +49,10 @@ function Posts() {
         
         />
       ))}
+
+     
+
+
     </div>
     );
   
