@@ -57,7 +57,7 @@ function StoryPopupModal({id}) {
                   </Transition.Child>
 
                   <div className="fixed inset-0 overflow-y-auto">
-                      <div className="flex min-h-full items-center justify-center  text-center">
+                      <div className="flex min-h-full items-center pt-20 justify-center  text-center">
                           <Transition.Child
                               as={Fragment}
                               enter="ease-out duration-300"
@@ -75,7 +75,7 @@ function StoryPopupModal({id}) {
                                       {selectedStory}
                                   </Dialog.Title> */}
                                   <div className=" ">
-                                      <Stories stories={story}  width={300} height={500} defaultInterval={1500} onStoryEnd={() => setOpen(false)} />
+                                      <Stories stories={story}  width={300} height={570} defaultInterval={1500} onStoryEnd={() => setOpen(false)} />
                                   </div>
                                  
 

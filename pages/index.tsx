@@ -29,16 +29,17 @@ function Home() {
       <Head>
         <title>Home | HexaGon</title>
       </Head>
-        <Header />
-      <StoryModal />
-      <CustomizeModal/>
-
       {ID.map((id) => (
         <StoryPopupModal
           key={id.id}
           id={id.id}
         />
       ))}
+        <Header />
+      <StoryModal />
+      <CustomizeModal/>
+
+      
         <Modal />
        
         <Toaster
