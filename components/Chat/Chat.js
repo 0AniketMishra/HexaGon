@@ -1,6 +1,6 @@
 import { ArrowLeftIcon, EllipsisVerticalIcon, FaceSmileIcon, PaperAirplaneIcon, PaperClipIcon, PhoneIcon, VideoCameraIcon } from '@heroicons/react/24/outline'
 import { addDoc, collection, doc, getDoc, getDocs, onSnapshot, query, where, updateDoc, setDoc } from 'firebase/firestore'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth, db } from '../../firebase'
 import { useRecoilState } from 'recoil';
@@ -19,33 +19,33 @@ function Chat() {
   const [sentMessages, setSentMessages] = useState([])
   const [selectedChatData, setSelectedChatData] = useState([])
   const [selectedPhotoURL, setSelectedPhotoURL] = useState([]) 
+  const ref = useRef()
+
+  useEffect(() => {
+  
+  }, [sentMessages])
+
 
   const sendMessage = async (e) => {
     e.preventDefault();
     const messagetosend = message;
     setMessage('')
+    
       if(messagetosend !== "" && " "){
-        await addDoc(collection(db, "userChat", user.uid, "Contacts", selectedChat, 'messages'), {
-          message: messagetosend,
-          username: user.displayName,
-          userImage: user.photoURL,
-          timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-          uid: user.uid
-        })
         await addDoc(collection(db, "userChat", selectedChat, "Contacts", user.uid, 'messages'), {
           message: messagetosend,
-          username: user.displayName,
-          userImage: user.photoURL,
           timestamp: firebase.firestore.FieldValue.serverTimestamp(),
           uid: user.uid
         })
+        await addDoc(collection(db, "userChat", user.uid, "Contacts", selectedChat, 'messages'), {
+          message: messagetosend,
+          timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+          uid: user.uid
+        })
+        
+       
       }
-    // await setDoc(collection(db,'userChat', selectedChat, "Contacts", user.uid,'latestMessage'),{
-    //   latestMessage: messagetosend,
-    //   username: user.displayName,
-    //   timestamp: firebase.firestore.FieldValue.serverTimestamp(),
-    //   uid: user.uid
-    // })
+
   }
  
    onSnapshot(query(collection(db, 'userChat', user.uid, "Contacts", selectedChat, "messages"), orderBy('timestamp')),
@@ -56,6 +56,7 @@ function Chat() {
     [db]
 
     ; (async () => {
+      
       const docRef = doc(db, 'users', selectedChat);
       const snapshots = await getDoc(docRef)
       const username = snapshots.data()?.username
@@ -66,7 +67,7 @@ function Chat() {
 
     })()
    
-  
+  ref.current?.scrollIntoView({ behaviour: "smooth" })
 
   return (
     <div className=''>
@@ -88,29 +89,31 @@ function Chat() {
               </div>
             </div>
 
-            <div className=" overflow-y-scroll scroll-auto  scrollbar-hide h-[calc(100vh-15rem)] mb-4">
+            <div  className=" overflow-y-scroll scroll-auto  scrollbar-hide h-[calc(100vh-15rem)] mb-4">
 
-
-
-              {sentMessages.map(message => {
-                return (
-                  <div key={message.id} className="mt-2">
-                    {user.uid === message.data().uid ? (
-                      <div key={message.id}>
-                        <div className=" flex justify-end ">
-                          <h1 className='w-fit p-1 rounded-xl max-w-[50%] pl-2 pr-2 text-white font-bold  mr-4 mt-2 bg-blue-800   '>{message.data().message}</h1>
+<div >
+                {sentMessages.map(message => {
+                  return (
+                    <div key={message.id} className="mt-2" ref={ref}>
+                      {user.uid === message.data().uid ? (
+                        <div key={message.id}>
+                          <div className=" flex justify-end ">
+                            <h1 className='w-fit p-1 rounded-xl max-w-[50%] pl-2 pr-2 text-white font-bold  mr-4 mt-2 bg-blue-800   '>{message.data().message}</h1>
+                          </div>
                         </div>
-                      </div>
-                    ) : (
-                      <div >
-                        <div className='flex justify-start'>
-                          <h1 className='w-fit  font-bold text-white bg-gray-600  pl-2 pr-2 p-1 rounded-xl ml-4 mt-2'>{message.data().message}</h1>
+                      ) : (
+                        <div >
+                          <div className='flex justify-start'>
+                            <h1 className='w-fit  font-bold text-white bg-gray-600  pl-2 pr-2 p-1 rounded-xl ml-4 mt-2'>{message.data().message}</h1>
+                          </div>
                         </div>
-                      </div>
-                    )}
-                  </div>
-                )
-              })}
+                      )}
+                    </div>
+                  )
+                })}
+</div>
+
+              
 
             </div>
             <div className="">
