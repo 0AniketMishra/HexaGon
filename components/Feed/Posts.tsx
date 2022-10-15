@@ -4,6 +4,7 @@ import {onSnapshot, collection, query, orderBy} from '@firebase/firestore'
 import { db } from '../../firebase';
 import firebase from 'firebase/compat';
 import StoryPopupModal from '../Modal/StoryPopupModal';
+import SinglePost from '../../pages/posts/[SinglePost]';
 
 function Posts() {
 
@@ -49,8 +50,8 @@ function Posts() {
         
         />
       ))}
-
      
+      
 
 
     </div>

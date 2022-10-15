@@ -90,37 +90,40 @@ function Post({ id, img,vid, posttext, timestamp, uid, lowerUsername }) {
   }
   return (
     <div>
+     
+         
+        
       <div className="mr-4  ml-4 lg:mr-2 lg:ml-2 mt-4 p-2 rounded-2xl  items-center bg-white   ">
         <div className="flex items-center ">
-         
-            {userinfo.map(info => {
-              return(
-                 <div className="flex  items-center "key={info.id}>
-                  <div>
+
+          {userinfo.map(info => {
+            return (
+              <div className="flex  items-center " key={info.id}>
+                <div>
                   <img src={info.data().photoURL} alt="" className="w-12 h-12 rounded-full p-1 border mb-2" />
+                </div>
+                <div className=" items-center">
+                  <div className="flex items-center">
+                    <Link href={'/users/' + uid}>
+                      <a>
+                        <h1 className="text-sm font-bold ml-2 hover:text-blue-500 cursor-pointer " >{info.data().username}</h1>
+                      </a>
+                    </Link>
+                    {followers.length > 10 && (
+                      <img src="https://th.bing.com/th/id/R.9c88df48e24182943ba4945b92aa3704?rik=ng8QDZfIeaOAvg&riu=http%3a%2f%2fclipart-library.com%2fimages%2fgTeEegLRc.png&ehk=rFKFF6hVaGBnpA8yieOD6YZvrGTf6%2fiafNKrPlbD7a8%3d&risl=&pid=ImgRaw&r=0" className='w-4 ml-1 h-4' alt="Verified!" />
+                    )}
                   </div>
-                  <div className=" items-center">
-                    <div className="flex items-center">
-                      <Link href={'/users/' + uid}>
-                        <a>
-                          <h1 className="text-sm font-bold ml-2 hover:text-blue-500 cursor-pointer " >{info.data().username}</h1>
-                        </a>
-                      </Link>
-                      {followers.length > 10 && (
-                        <img src="https://th.bing.com/th/id/R.9c88df48e24182943ba4945b92aa3704?rik=ng8QDZfIeaOAvg&riu=http%3a%2f%2fclipart-library.com%2fimages%2fgTeEegLRc.png&ehk=rFKFF6hVaGBnpA8yieOD6YZvrGTf6%2fiafNKrPlbD7a8%3d&risl=&pid=ImgRaw&r=0" className='w-4 ml-1 h-4' alt="Verified!" />
-                      )}
-                    </div>
-                    <div className="ml-2 flex">
-                      <h1 className="text-xs semi-font-bold">{lowerUsername}</h1>
-                      <h1 className="text-xs ml-2">  <Moment fromNow>{timestamp?.toDate()}</Moment></h1>
-                    </div>
+                  <div className="ml-2 flex">
+                    <h1 className="text-xs semi-font-bold">{lowerUsername}</h1>
+                    <h1 className="text-xs ml-2">  <Moment fromNow >{timestamp?.toDate()}</Moment></h1>
                   </div>
                 </div>
-              )
-            })}
+              </div>
+            )
+          })}
 
-           
-            
+
+
           <h1 className="flex-1"></h1>
 
           <Menu as="div" className="relative inline-block text-left">
@@ -188,17 +191,28 @@ function Post({ id, img,vid, posttext, timestamp, uid, lowerUsername }) {
           </Menu>
         </div>
 
-        <div className="ml-4  mt-2 md:mr-4 ">
-          <h1 className="lg:w-[90%] mb-4 mt-4 ml-4 text-lg ">{posttext}</h1>
-          <div className="flex items-center space-x-4 p-2 justify-left" >
-            <img src={img} alt="" className='max-h-96 rounded-lg ' />
-            {vid && (
-              <video src={vid} controls autoPlay muted loop className="rounded-lg max-h-[34rem]" />
-            )}
 
-          </div>
+        <div>
+          <Link href={'/posts/' + id}>
+            <a>
+              <div className="ml-4  mt-2 md:mr-4 ">
+                <h1 className="lg:w-[90%] mb-4 mt-4 ml-4 text-lg ">{posttext}</h1>
+                <div className="flex items-center space-x-4 p-2 justify-left" >
+                  <img src={img} alt="" className='max-h-96 rounded-lg ' />
+                  {vid && (
+                    <video src={vid} controls autoPlay muted loop className="rounded-lg max-h-[34rem]" />
+                  )}
+
+                </div>
+              </div>
+            </a>
+          </Link>
         </div>
+
+
         <div >
+
+
 
           <div className=" mt-4 p-1 flex space-x-8 ml-8  justify-evenly  mr-8 mb-4">
             <div className=" items-center hover:text-red-500  cursor-pointer ">
@@ -221,10 +235,15 @@ function Post({ id, img,vid, posttext, timestamp, uid, lowerUsername }) {
               <ChatBubbleOvalLeftEllipsisIcon className='h-6 ' />
               <h1 className='ml-2'>{comments.length}</h1>
             </div>
-            <div className="flex items-center hover:text-purple-500  ">
+
+
+            <div className="flex items-center hover:text-purple-500" >
               <ArrowsRightLeftIcon className='h-6 ' />
               <h1 className='ml-2'>3.2K</h1>
             </div>
+
+
+
             <ShareIcon className='h-6   hover:text-green-500' />
           </div>
         </div>
@@ -245,7 +264,7 @@ function Post({ id, img,vid, posttext, timestamp, uid, lowerUsername }) {
 
             {comments.length > 0 && (
               <div>
-                <h1 className='font-bold  mb-4 mt-4 text-lg ml-2'>Comments - </h1>
+                {/* <h1 className='font-bold  mb-4 mt-4 text-lg ml-2'>Comments - </h1> */}
                 <div className='ml-2 items-center mt-6 h-46 overflow-y-scroll  scrollbar-hide'>
                   {comments.map(comment => (
                     <div key={comment.id} className=" space-x-2 mb-3 " >
@@ -264,6 +283,7 @@ function Post({ id, img,vid, posttext, timestamp, uid, lowerUsername }) {
           </div>
         )}
       </div>
+       
     </div>
   )
 }

@@ -25,7 +25,9 @@ function Chat() {
   
   }, [sentMessages])
 
-
+ const exitChat = async () => {
+  setSelectedChat("Undefined")
+ }
   const sendMessage = async (e) => {
     e.preventDefault();
     const messagetosend = message;
@@ -82,11 +84,11 @@ function Chat() {
                 <span className=' font-bold '>{selectedChatData}</span> 
               </div>
 
-              <div className='flex space-x-4 items-center'>
+              {/* <div className='flex space-x-4 items-center'>
                 <VideoCameraIcon onClick={fetch} className='w-4 h-4 ' />
                 <PhoneIcon className='w-4 h-4' />
                 <EllipsisVerticalIcon className='w-5 h-5  ml-4' />
-              </div>
+              </div> */}
             </div>
 
             <div  className=" overflow-y-scroll scroll-auto  scrollbar-hide h-[calc(100vh-15rem)] mb-4">
@@ -157,16 +159,17 @@ function Chat() {
           {/* {contactInfo.map(info => {
          return( */}
           <div className="flex items-center space-x-2">
+            <ArrowLeftIcon className='w-8 h-8 p-1 bg-gray-100 rounded-full cursor-pointer' onClick={exitChat}/>
             <img src={selectedPhotoURL} className="w-8 h-8 rounded-full"/>
             <span className=' font-bold '>{selectedChatData}</span>
           </div>
           {/* )
        })} */}
-          <div className='flex space-x-4 items-center'>
+          {/* <div className='flex space-x-4 items-center'>
             <VideoCameraIcon onClick={fetch} className='w-4 h-4 ' />
             <PhoneIcon className='w-4 h-4' />
             <EllipsisVerticalIcon className='w-5 h-5  ml-4' />
-          </div>
+          </div> */}
         </div>
 
         <div className=" overflow-y-scroll scrollbar-hide h-[68vh]">
@@ -202,8 +205,8 @@ function Chat() {
 
         </div>
         <div className="">
-          <div className=' mb-6 flex  ml-2 items-end  justify-center '>
-            <div className="flex items-center w-full ml-6 mr-6 ">
+          <div className=' mb-6 flex  items-end  justify-center '>
+            <div className="flex items-center w-full ml-4 mr-4 ">
               <div className="flex space-x-2">
                 <FaceSmileIcon className='w-6' />
                 <PaperClipIcon className="w-6" />

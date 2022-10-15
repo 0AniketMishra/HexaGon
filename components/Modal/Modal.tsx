@@ -91,6 +91,7 @@ function Modal() {
        
       setLoading(true)
       const docRef = await addDoc(collection(db, "posts"), {
+      
         username: user.displayName, 
         posttext: captionRef,
         profileImg: user.photoURL, 
@@ -98,6 +99,9 @@ function Modal() {
           uid: user.uid,
           lowerUsername: '@'+user.displayName.replace(/\s+/g, '').toLowerCase()
       })
+        await updateDoc(doc(db, 'posts', docRef.id), {
+            postId: docRef.id
+        })
        
       console.log("New doc added wth ID", docRef.id); 
       const imageRef = ref(storage, `posts/${docRef.id}/image`)

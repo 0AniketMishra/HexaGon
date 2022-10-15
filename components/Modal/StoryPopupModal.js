@@ -25,17 +25,15 @@ function StoryPopupModal({id}) {
     )
 
     
-    const story = [
-        {
-            url: 'https://th.bing.com/th/id/OIP.MBLGS3hfrLkuT5PoZ62msgHaEK?pid=ImgDet&rs=1',
-            duration: 5000,
-           
-            header: {
-                heading: 'Elon Musk',
-                subheading: 'Posted 30m ago',
-                profileImage: 'https://picsum.photos/100/100',
-            },
-        },
+ const stories = [
+  {
+    url:  "https://firebasestorage.googleapis.com/v0/b/pentagon-89b4a.appspot.com/o/posts%2FfdHvrocpeXg6z5gdPmaP%2Fimage?alt=media&token=82355200-cfd7-41a3-b8c6-8195d5c81e12", 
+    duration:3000 
+},
+ {
+   url:  'https://th.bing.com/th/id/OIP.MBLGS3hfrLkuT5PoZ62msgHaEK?pid=ImgDet&rs=1',
+   duration:3000
+ }
     ]
 
   return (
@@ -75,8 +73,14 @@ function StoryPopupModal({id}) {
                                       {selectedStory}
                                   </Dialog.Title> */}
                                   <div className=" ">
-                                      <Stories stories={story}  width={300} height={570} defaultInterval={1500} onStoryEnd={() => setOpen(false)} />
-                                  </div>
+                                      <Stories
+                                          stories={stories}
+                                          defaultInterval={6000}
+                                          width={300}
+                                          height={500}
+                                          loop={true}
+                                      />
+                                      </div>
                                  
 
                                   <div className="">

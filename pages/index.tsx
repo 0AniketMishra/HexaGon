@@ -33,7 +33,9 @@ function Home() {
         <StoryPopupModal
           key={id.id}
           id={id.id}
+          
         />
+        
       ))}
         <Header />
       <StoryModal />
