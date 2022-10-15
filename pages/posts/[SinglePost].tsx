@@ -116,13 +116,18 @@ const SinglePost = () => {
                               <Sidebar/>
                           </div>
                       </section>
-                      <section className="lg:col-span-6 md:col-span-6 w-[93%] mx-auto mt-4">
+                      <section className="lg:col-span-6 md:col-span-6 lg:w-[96%] mx-auto mt-4">
                
-                  <div className="mr-4  ml-4 lg:mr-2 lg:ml-2  p-2 rounded-2xl  items-center bg-white   ">
+                  <div className="mr-4  ml-4 lg:mr-2 lg:ml-2  p-2 rounded-2xl mt-2 items-center bg-white   ">
                       
                      
                       <div className="flex items-center space-x-2 mb-4  p-2 border-b">
-                          <ArrowLeftIcon className='w-5 h-5' />
+                          <Link href="/" className='cursor-pointer'>
+                              <a>
+                                  <ArrowLeftIcon className='w-5 h-5' />
+                              </a>
+                          </Link>
+                          
                           <h1 className='font-bold '>Post By {username}</h1>
                       </div>
                     

@@ -10,6 +10,9 @@ import { Fragment } from 'react'
 import { Menu, Transition } from '@headlessui/react'
 import Link from 'next/link'
 import toast from 'react-hot-toast'
+import { ShareAtomState } from '../../atoms/ShareAtom';
+import { useRecoilState } from 'recoil';
+import { postPidState } from '../../atoms/postPidAtom';
 
 function Post({ id, img,vid, posttext, timestamp, uid, lowerUsername }) {
 
@@ -24,6 +27,8 @@ function Post({ id, img,vid, posttext, timestamp, uid, lowerUsername }) {
   const [verified, setVerified] = useState(false)
   const [userinfo, setUserinfo] = useState([])
   const userRef = collection(db, "users");
+  const [shareOpen, setShareOpen] = useRecoilState(ShareAtomState)
+  const [postPidValue, setPostPidValue] = useRecoilState(postPidState)
 
   useEffect(() => onSnapshot(collection(db, 'posts', id, 'likes'), (snapshot) =>
     setLikes(snapshot.docs)), [db, id]
@@ -61,7 +66,7 @@ function Post({ id, img,vid, posttext, timestamp, uid, lowerUsername }) {
     }
 
   }
-
+  
   useEffect(
     () =>
       onSnapshot(query(collection(db, 'users',), where("uid", "==", uid)),
@@ -84,7 +89,6 @@ function Post({ id, img,vid, posttext, timestamp, uid, lowerUsername }) {
 
     })
   }
-
   function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
   }
@@ -244,7 +248,10 @@ function Post({ id, img,vid, posttext, timestamp, uid, lowerUsername }) {
 
 
 
-            <ShareIcon className='h-6   hover:text-green-500' />
+            <ShareIcon className='h-6   hover:text-green-500 cursor-pointer' onClick={() => {
+              setPostPidValue(id)
+              setShareOpen(true)
+            }}/>
           </div>
         </div>
 
