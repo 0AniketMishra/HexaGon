@@ -66,7 +66,7 @@ function Post({ id, img,vid, posttext, timestamp, uid, lowerUsername }) {
     }
 
   }
-  
+ 
   useEffect(
     () =>
       onSnapshot(query(collection(db, 'users',), where("uid", "==", uid)),
@@ -243,15 +243,15 @@ function Post({ id, img,vid, posttext, timestamp, uid, lowerUsername }) {
 
             <div className="flex items-center hover:text-purple-500" >
               <ArrowsRightLeftIcon className='h-6 ' />
-              <h1 className='ml-2'>3.2K</h1>
+              <h1 className='ml-2'>3.1K</h1>
             </div>
 
 
 
             <ShareIcon className='h-6   hover:text-green-500 cursor-pointer' onClick={() => {
-              setPostPidValue(id)
+              setPostPidValue(id);
               setShareOpen(true)
-            }}/>
+            }} />
           </div>
         </div>
 

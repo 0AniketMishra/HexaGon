@@ -29,6 +29,7 @@ function Sidebar() {
             ),
         [db]
     );
+    
 
     return (
         <div className="overflow-y-scroll h-[85vh]  scrollbar-hide">
@@ -36,7 +37,7 @@ function Sidebar() {
               {userInfo.map(info => {
                 return(
                     <div className=" rounded-2xl overflow-hidden bg-white " key={info.id}>
-                        <img src="https://i.imgur.com/dYcYQ7E.png" className="" />
+                        <img src="https://th.bing.com/th/id/OIP.SJV1H6A-2Xkj8BveGnBylAHaDt?pid=ImgDet&rs=1" className="h-24 w-60" />
                         <div className="flex ml-4 -mt-8">
                             <img src={info.data().photoURL} className="rounded-full -mt-0.1 w-16 p-[2px] border bg-white h-16" />
                         </div>

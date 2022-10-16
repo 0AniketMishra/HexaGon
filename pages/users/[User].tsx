@@ -185,8 +185,8 @@ const ContactUser = async () => {
 
                                         </div>
 
-                                        <div className="flex justify-between px-5  -mt-12">
-                                            <img className="h-28 w-28 bg-white p-1 rounded-full  ml-4 " src={info.data().photoURL} alt="" />
+                                        <div className="flex justify-between px-5   -mt-12">
+                                            <img className="h-28 w-28 bg-white p-1 rounded-full ml-2 " src={info.data().photoURL} alt="" />
                                             {pid != user.uid && (
                                                 <div className='flex space-x-4 '>
                                                     {/* <EllipsisHorizontalCircleIcon className="w-8  mt-8 h-8 bg-white rounded-full"/> */}
@@ -216,7 +216,7 @@ const ContactUser = async () => {
                                         <div className="">
                                             {/* If you want the text to be centered then add text-center in the div below */}
 
-                                            <div className=" px-14">
+                                            <div className="px-8">
                                                 <div>
                                                     <div className='flex items-center'>
                                                         <h2 className="text-gray-800 text-xl font-bold">{info.data().username}</h2>
@@ -232,14 +232,14 @@ const ContactUser = async () => {
                                                 </div>
 
 
-                                                <div className="flex items-center space-x-2 mt-4">
+                                                <div className="flex items-start space-x-2 mt-4">
                                                     <h1 className='font-bold'>About: </h1>
-                                                    <p>{info.data().about}</p>
+                                                    <p className=''>{info.data().about}</p>
                                                 </div>
 
                                                 <div className="flex mt-2 items-center space-x-2">
                                                     <h1 className='font-bold'>Last Seen: </h1>
-                                                    <h1 className=""> <Moment className="text-sm mr-6" fromNow>{info.data().lastSeen?.toDate()}</Moment></h1>
+                                                    <h1 className=""> <Moment className="text-sm mr-6 " fromNow>{info.data().lastSeen?.toDate()}</Moment></h1>
                                                 </div>
 
                                                 <div onClick={() => setFollowOpen(true)} className="flex  space-x-10 mt-4 mb-4 font-bold cursor-pointer rounded-lg hover:bg-gray-100 w-fit p-2 ">
@@ -254,21 +254,21 @@ const ContactUser = async () => {
                                             <div className="  flex mt-6 ml-4 mr-4 mb-4">
                                                 {selectedTab === "posts" ? (
                                                     <div className='w-1/2'>
-                                                        <h1 onClick={() => setSelectedTab('posts')} className=' text-center border-b pb-2 pt-2 border bg-gray-100  cursor-pointer'>Posts by {info.data().username}</h1>
+                                                        <h1 onClick={() => setSelectedTab('posts')} className=' text-center text-sm border-b pb-2 pt-2 border bg-gray-100  cursor-pointer'>Posts by {info.data().username}</h1>
                                                     </div>
                                                 ) : (
                                                     <div className='w-1/2'>
-                                                        <h1 onClick={() => setSelectedTab('posts')} className='text-center border-b pb-2 pt-2 border hover:bg-gray-100  cursor-pointer'>Posts by {info.data().username}</h1>
+                                                        <h1 onClick={() => setSelectedTab('posts')} className='text-center text-sm border-b pb-2 pt-2 border hover:bg-gray-100  cursor-pointer'>Posts by {info.data().username}</h1>
                                                     </div>
                                                 )
                                                 }
                                                 {selectedTab === "likes" ? (
                                                     <div className='w-1/2'>
-                                                        <h1 onClick={() => setSelectedTab("likes")} className=' text-center border-b pb-2 pt-2 border bg-gray-100  cursor-pointer'>Likes by {info.data().username}</h1>
+                                                        <h1 onClick={() => setSelectedTab("likes")} className=' text-center text-sm border-b pb-2 pt-2 border bg-gray-100  cursor-pointer'>Likes by {info.data().username}</h1>
                                                     </div>
                                                 ) : (
                                                     <div className='w-1/2'>
-                                                        <h1 onClick={() => setSelectedTab("likes")} className=' text-center border-b pb-2 pt-2 border hover:bg-gray-100  cursor-pointer'>Likes by {info.data().username}</h1>
+                                                        <h1 onClick={() => setSelectedTab("likes")} className=' text-center text-sm border-b pb-2 pt-2 border hover:bg-gray-100  cursor-pointer'>Likes by {info.data().username}</h1>
                                                     </div>
 
                                                 )}
@@ -277,9 +277,9 @@ const ContactUser = async () => {
                                                 <div className=''>
                                                     {userPosts.map(post => {
                                                         return (
-                                                            <div className='mt-4 ml-4 mr-4 mb-4  p-1 rounded-lg ' key={post.id}>
+                                                            <div className='mt-4 ml-2 mr-2 mb-4  p-1 rounded-lg ' key={post.id}>
                                                                 <div className='flex space-x-2 items-center'>
-                                                                    <div><img src={post.data().profileImg} alt="" className='w-10 h-10  p-1 rounded-full' /></div>
+                                                                    <div><img src={post.data().profileImg} alt="" className='w-12 h-12  p-1 rounded-full' /></div>
                                                                     <div>
                                                                         <h1 className='font-bold'>{post.data().username}</h1>
                                                                         <div className='flex space-x-2'>
@@ -354,15 +354,15 @@ const ContactUser = async () => {
                                                                         </Menu>
                                                                     </div>
                                                                 </div>
-                                                                <div className='ml-12 mt-2 mb-4'>
+                                                                <div className='ml-4 mt-2 mb-4'>
                                                                     <p>{post.data().posttext}</p>
                                                                 </div>
                                                                 <div className='max-w-48 '>
                                                                     {post.data().image && (
-                                                                        <img src={post.data().image} alt="" className='w-96 ml-12 rounded-lg shadow-md' />
+                                                                        <img src={post.data().image} alt="" className='max-w-[14rem] ml-4 rounded-lg shadow-md' />
                                                                     )}
                                                                     {post.data().video && (
-                                                                        <video muted autoPlay loop controls src={post.data().video} className="rounded-lg w-72 ml-12 shadow-md"></video>
+                                                                        <video muted autoPlay loop controls src={post.data().video} className="rounded-lg max-w-[16rem] ml-4 shadow-md"></video>
                                                                     )}
                                                                 </div>
                                                                 <div>

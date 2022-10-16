@@ -19,6 +19,8 @@ function Chat() {
   const [sentMessages, setSentMessages] = useState([])
   const [selectedChatData, setSelectedChatData] = useState([])
   const [selectedPhotoURL, setSelectedPhotoURL] = useState([]) 
+  const [sentMessage, setSentMessage] = useState("")
+
   const ref = useRef()
 
   useEffect(() => {
@@ -34,6 +36,7 @@ function Chat() {
     setMessage('')
     
       if(messagetosend !== "" && " "){
+        setSentMessage(messagetosend)
         await addDoc(collection(db, "userChat", selectedChat, "Contacts", user.uid, 'messages'), {
           message: messagetosend,
           timestamp: firebase.firestore.FieldValue.serverTimestamp(),
@@ -44,9 +47,11 @@ function Chat() {
           timestamp: firebase.firestore.FieldValue.serverTimestamp(),
           uid: user.uid
         })
+        setSentMessage("")
         
        
       }
+      
 
   }
  
@@ -102,6 +107,7 @@ function Chat() {
                           <div className=" flex justify-end ">
                             <h1 className='w-fit p-1 rounded-xl max-w-[50%] pl-2 pr-2 text-white font-bold  mr-4 mt-2 bg-blue-800   '>{message.data().message}</h1>
                           </div>
+                         
                         </div>
                       ) : (
                         <div >
@@ -113,6 +119,11 @@ function Chat() {
                     </div>
                   )
                 })}
+               {sentMessage !== "" &&(
+                  <div className='flex justify-end'>
+                    <h1 className='w-fit p-1 rounded-xl max-w-[50%] pl-2 pr-2 text-white font-bold  mr-4 mt-2 bg-blue-800   '>{sentMessage}</h1>
+                  </div>
+               )}
 </div>
 
               
@@ -188,13 +199,19 @@ function Chat() {
                 ) : (
                     <div >
                       <div className='flex justify-start'>
-                        <h1 className='w-fit  font-bold text-white bg-gray-600  pl-2 pr-2 p-1 rounded-xl ml-4 mt-2'>{message.data().message}</h1>
+                        <h1 className='w-fit max-w-[50%] font-bold text-white bg-gray-600  pl-2 pr-2 p-1 rounded-xl ml-4 mt-2'>{message.data().message}</h1>
                       </div>
                     </div>
                 )}
               </div>
             )
           })}
+
+            {sentMessage !== "" && (
+              <div className='flex justify-end'>
+                <h1 className='w-fit p-1 rounded-xl max-w-[50%] pl-2 pr-2 text-white font-bold  mr-4 mt-2 bg-blue-800   '>{sentMessage}</h1>
+              </div>
+            )}
           {/* {receivedMessages.map(message => {
           return (
             

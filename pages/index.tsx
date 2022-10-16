@@ -11,6 +11,7 @@ import FollowModal from '../components/Modal/FollowModal'
 import { collection, onSnapshot, query } from 'firebase/firestore'
 import { db } from '../firebase'
 import ShareModal from '../components/Modal/ShareModal'
+import Sidebar from '../components/Common/Sidebar'
 
 
 function Home() {
@@ -39,12 +40,11 @@ function Home() {
         
       ))}
         <Header />
+
       <StoryModal />
       <CustomizeModal/>
       <ShareModal/>
-
-      
-        <Modal />
+      <Modal />
        
         <Toaster
           position="top-center"
