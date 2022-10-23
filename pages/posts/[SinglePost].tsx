@@ -31,6 +31,8 @@ const SinglePost = () => {
     const [likes, setLikes] = useState([])
     const [comment, setComment] = useState("");
     const [comments, setComments] = useState([])
+    const [hashtag, setHashTag] = useState([]);
+    const [atTag, setAtTag] = useState([])
 
     useEffect(() => {
         ; (async () => {
@@ -43,6 +45,8 @@ const SinglePost = () => {
             const posttext = snapshots.data().posttext
             const image = snapshots.data().image
             const video = snapshots.data().video
+            const hashTag = snapshots.data().hashTags
+            const atTag2 = snapshots.data().atTags
             setUid(uid)
             setUsername(username)
             setPhotoURL(photoURL)
@@ -50,6 +54,8 @@ const SinglePost = () => {
             setPosttext(posttext)
             setImage(image)
             setVideo(video)
+            setHashTag(hashTag)
+            setAtTag(atTag2)
 
 
         })()
@@ -236,7 +242,21 @@ const SinglePost = () => {
                                           {video && (
                                               <video src={video} controls autoPlay muted loop className="rounded-lg max-h-[34rem]" />
                                           )}
+                                  {hashtag?.map(tag => {
+                                      return (
+                                          <div>
+                                              <h1 className="font-bold bg-gray-100 text-blue-500 hover:text-black cursor-pointer p-1 w-fit 00 mt-3 rounded-lg pl-2 pr-2">{tag}</h1>
 
+                                          </div>
+                                      )
+                                  })}
+                                  {atTag?.map(tag => {
+                                      return (
+                                          <div>
+                                              <h1 className="font-bold bg-gray-100 text-blue-500 hover:text-black cursor-pointer p-1 w-fit 00 mt-3 rounded-lg pl-2 pr-2">{tag}</h1>
+                                          </div>
+                                      )
+                                  })}
                                       </div>
                                   </div>
                               

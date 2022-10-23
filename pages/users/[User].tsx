@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 import {useEffect, useState} from 'react'
-import {doc, getDoc, onSnapshot, collection, deleteDoc, setDoc, query, where, getDocs} from "firebase/firestore";
+import {doc, getDoc, onSnapshot, collection, deleteDoc, setDoc, query, where, getDocs, addDoc} from "firebase/firestore";
 import {db}  from '../../firebase'
 import Header from '../../components/Common/Header';
 import MiniProfile from '../../components/Common/MiniProfile';
@@ -70,25 +70,25 @@ const User = ({
         setFollowers(snapshot.docs)), [db]
     )
     useEffect(() => {
-        setHasFollowed(followers.findIndex(follower => follower.id === user.uid) !== -1)
+        setHasFollowed(followers.findIndex(follower => follower.id === user.displayName.replace(/\s+/g, '').toLowerCase()) !== -1)
     }, [followers])
     useEffect(() => onSnapshot(collection(db, 'users', pid, 'following'), (snapshot) =>
         setFollowing(snapshot.docs)), [db]
     )
     const followUser = async () => {
       
-        if (hasFollowed && pid!=user.uid) {
-            await deleteDoc(doc(db, 'users', pid ,  'followers', user.uid));
-            await deleteDoc(doc(db, 'users', user.uid, 'following', pid))
+        if (hasFollowed && pid != user.displayName.replace(/\s+/g, '').toLowerCase()) {
+            await deleteDoc(doc(db, 'users', pid, 'followers', user.displayName.replace(/\s+/g, '').toLowerCase()));
+            await deleteDoc(doc(db, 'users', user.displayName.replace(/\s+/g, '').toLowerCase(), 'following', pid))
             setHasFollowed(false)
         } else {
 
-            await setDoc(doc(db, 'users', pid , 'followers', user.uid), {
+            await setDoc(doc(db, 'users', pid, 'followers', user.displayName.replace(/\s+/g, '').toLowerCase()), {
                 username: user.displayName,
                 photoURL: user.photoURL,
                 uid: user.uid
             });
-            await setDoc(doc(db, 'users', user.uid, 'following', pid), {
+            await setDoc(doc(db, 'users', user.displayName.replace(/\s+/g, '').toLowerCase(), 'following', pid), {
                 username: username,
                 photoURL: photoURL,
                 uid: uid
@@ -109,7 +109,7 @@ const User = ({
 //   }
 
 const ContactUser = async () => {
-    await setDoc(doc(db, 'userChat', user.uid,"Contacts", uid ), {
+    await setDoc(doc(db, 'userChat', user.displayName.replace(/\s+/g, '').toLowerCase(),"Contacts", uid), {
         username: username,
         uid: uid, 
         photoURL: photoURL,
@@ -131,7 +131,7 @@ const ContactUser = async () => {
 
     useEffect(
         () =>
-            onSnapshot(query(collection(db, 'users',), where("uid", "==", pid)),
+            onSnapshot(query(collection(db, 'users',), where("slug", "==", pid)),
                 snapshot => {
                     setUserInfo(snapshot.docs)
                 }
@@ -140,7 +140,7 @@ const ContactUser = async () => {
     );
     useEffect(
         () =>
-            onSnapshot(query(collection(db, 'posts',), where("uid", "==", pid)),
+            onSnapshot(query(collection(db, 'posts',), where("lowerUsername", "==", "@"+pid)),
                 snapshot => {
                     setUserPosts(snapshot.docs)
                 }
@@ -187,7 +187,7 @@ const ContactUser = async () => {
 
                                         <div className="flex justify-between px-5   -mt-12">
                                             <img className="h-28 w-28 bg-white p-1 rounded-full ml-2 " src={info.data().photoURL} alt="" />
-                                            {pid != user.uid && (
+                                            {pid != user.displayName.replace(/\s+/g, '').toLowerCase() && (
                                                 <div className='flex space-x-4 '>
                                                     {/* <EllipsisHorizontalCircleIcon className="w-8  mt-8 h-8 bg-white rounded-full"/> */}
                                                     <Link href='/chats'>

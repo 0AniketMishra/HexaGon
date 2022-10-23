@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react'
-import { ArrowPathIcon, ArrowPathRoundedSquareIcon, Bars4Icon, BellIcon, HomeIcon, MagnifyingGlassIcon, PlusIcon, UserGroupIcon,} from '@heroicons/react/24/outline'
+import { ArrowPathIcon, ArrowPathRoundedSquareIcon, Bars4Icon, BellIcon, CogIcon, HomeIcon, MagnifyingGlassIcon, PlusIcon, SparklesIcon, UserGroupIcon,} from '@heroicons/react/24/outline'
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { auth } from '../../firebase';
 import { modalState } from '../../atoms/modalAtom';
@@ -110,6 +110,17 @@ function Header() {
                     <Link href="/chats" >
                         <a className="flex items-center    hover:scale-125 transition-all duration-150 ease-out max-w-fit p-2  group relative text-black before:absolute before:inset-x-0 before:bottom-0 before:h-2 before:origin-right before:scale-x-0 before:text-cyan-100 before:transition before:duration-200 hover:before:origin-left hover:before:scale-x-100">
                             <UserGroupIcon className=" w-6 h-6 " />
+                        </a>
+                    </Link>
+                    
+                    <Link href="/" >
+                        <a className="flex items-center">
+                            <SparklesIcon className='  w-6 h-6 hover:scale-125 transition-all duration-150 ease-out' />
+                        </a>
+                    </Link>
+                    <Link href="/" >
+                        <a className="flex items-center">
+                            <CogIcon className='  w-6 h-6 hover:scale-125 transition-all duration-150 ease-out' />
                         </a>
                     </Link>
                 </div>

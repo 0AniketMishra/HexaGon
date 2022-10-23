@@ -14,10 +14,10 @@ function Sidebar() {
     const [userInfo, setUserInfo] = useState([])
     const [Open, setOpen] = useRecoilState(CustomizeState)
     
-        useEffect(() => onSnapshot(collection(db, 'users', user.uid, 'followers'), (snapshot) =>
+    useEffect(() => onSnapshot(collection(db, 'users', user.displayName.replace(/\s+/g, '').toLowerCase(), 'followers'), (snapshot) =>
         setFollowers(snapshot.docs)), [db]
     )
-    useEffect(() => onSnapshot(collection(db, 'users', user.uid, 'following'), (snapshot) =>
+    useEffect(() => onSnapshot(collection(db, 'users', user.displayName.replace(/\s+/g, '').toLowerCase(), 'following'), (snapshot) =>
         setFollowing(snapshot.docs)), [db]
     )
     useEffect(

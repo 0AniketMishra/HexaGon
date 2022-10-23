@@ -34,11 +34,14 @@ function Posts() {
   const sendComment = async (e) => {
     e.preventDefault()
   }
-
+  
   return (
+    
     <div>
       {posts.map((post) => (
+       
         <Post
+        
           key={post.id}
           id={post.id}
           img={post.data().image}
@@ -47,6 +50,10 @@ function Posts() {
           timestamp={post.data().timestamp}
           lowerUsername={post.data().lowerUsername}
           uid={post.data().uid}
+          hashTags={post.data()?.hashTags}
+          atTags={post.data()?.atTags}
+        
+          
         
         />
       ))}
@@ -55,6 +62,7 @@ function Posts() {
 
 
     </div>
+    
     );
   
 }

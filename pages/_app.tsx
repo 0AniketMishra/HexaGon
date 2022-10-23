@@ -20,7 +20,7 @@ function MyApp({ Component, pageProps }: any) {
   }
   useEffect(() => {
     if (user && exists===false) {
-      db.collection('users').doc(user.uid).set({
+      db.collection('users').doc(user.displayName.replace(/\s+/g,'').toLowerCase()).set({
         email: user.email,
         lastSeen: firebase.firestore.FieldValue.serverTimestamp(),
         photoURL: user.photoURL,

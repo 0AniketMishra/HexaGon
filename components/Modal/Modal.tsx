@@ -13,6 +13,7 @@ import {ref, getDownloadURL, uploadString} from '@firebase/storage'
 import toast from 'react-hot-toast'
 import { TagsInput } from "react-tag-input-component";
 import { setHttpAgentOptions } from 'next/dist/server/config'
+import { setDoc } from 'firebase/firestore'
 
 function Modal() {
 
@@ -27,6 +28,9 @@ function Modal() {
     const [box, setBox] = useState(false)
     // const [hash,setHash]=  useState(["#"])
     const [selected, setSelected] = useState([]);
+    const [atTag, setAtTag] = useState([])
+
+
     const [emojis, setEmojis] = useState([
         {"id": 1, "emoji" : '😀' },
         {"id": 2, "emoji": '😁'},
@@ -73,13 +77,20 @@ function Modal() {
  console.log();
 
    const addTags = event => {
-       if (event.key === "Enter" && event.target.value !== "" && event.target.value.spilt("#")){
-         setSelected([...selected, event.target.value])
-         event.target.value = ""
-     }
+       if (event.key === "Enter" && event.target.value !== "" && event.target.value.charAt(0) === "#") {
+           setSelected([...selected, event.target.value.slice(1)])
+           event.target.value = ""
+       }
+       if (event.key === "Enter" && event.target.value !== "" && event.target.value.charAt(0) === "@") {
+           setAtTag([...atTag, event.target.value.slice(1)])
+           event.target.value = ""
+       }
    }
    const removeTags = indexToRemove => {
        setSelected(selected.filter((_, index) => index !== indexToRemove))
+   }
+   const removeTags2 = indexToRemove => {
+       setAtTag(atTag.filter((_, index) => index !== indexToRemove))
    }
     const uploadPost = async () => {
        
@@ -97,11 +108,38 @@ function Modal() {
         profileImg: user.photoURL, 
           timestamp: firebase.firestore.FieldValue.serverTimestamp(), 
           uid: user.uid,
-          lowerUsername: '@'+user.displayName.replace(/\s+/g, '').toLowerCase()
+          lowerUsername: '@'+user.displayName.replace(/\s+/g, '').toLowerCase(),
+          
+   
+
       })
+           if(atTag.length != 0){
+               await updateDoc(doc(db, 'posts', docRef.id), {
+                   atTags: atTag,
+                   
+               })
+           }
+        if (selected.length != 0) {
+            await updateDoc(doc(db, 'posts', docRef.id), {
+                hashTags: selected,
+
+            })
+        }
+        
+        await setDoc(doc(db, 'Tags',"hashTags" ), {
+            Value: selected, 
+            origin: user.uid,
+            username: user.displayName,
+            photoURL: user.photoURL,
+            
+        }, { merge: true });
+            
+        
         await updateDoc(doc(db, 'posts', docRef.id), {
             postId: docRef.id
         })
+        
+       
        
       console.log("New doc added wth ID", docRef.id); 
       const imageRef = ref(storage, `posts/${docRef.id}/image`)
@@ -195,6 +233,28 @@ function Modal() {
                                     className='h-28 rounded-lg outline-none focus:ring-0 w-full p-2'
                                     placeholder="Say Something..."/>
                                     </div>
+                                    <div className=' space-x-2'>
+                                        <ul className='flex space-x-2'>
+                                            {selected.map((tag, index) => (
+
+                                                <li key={index} className="flex space-x-2 items-center bg-blue-100 p-1 w-fit rounded-lg ">
+                                                    <span className=''>#{tag.replace(/\s+/g, '')}</span>
+                                                    <XMarkIcon className='w-4 h-4 p-[2px] cursor-pointer rounded-full bg-white' onClick={() => removeTags(index)} />
+                                                </li>
+
+                                            ))}
+                                            {atTag.map((tag, index) => (
+
+                                                <li key={index} className="flex space-x-2 items-center bg-blue-100 p-1 w-fit rounded-lg ">
+                                                    <span className=''>@{tag.replace(/\s+/g, '').toLowerCase()}</span>
+                                                    <XMarkIcon className='w-4 h-4 p-[2px] cursor-pointer rounded-full bg-white' onClick={() => removeTags2(index)} />
+                                                </li>
+
+                                            ))}
+                                        </ul>
+                                        <input type="text" placeholder='Press enter to add tags' onKeyUp={addTags} className="w-full p-1 outline-none"/>
+
+                                    </div>
 
                                     <div className='flex space-x-4'>
                                         {selectedFile ? (
@@ -248,20 +308,7 @@ function Modal() {
                                             })}
                                         </div>
                                   )}
-                                    <div className=' space-x-2'>
-                                       <ul className='flex space-x-2'>
-                                        {selected.map((tag, index) => (
-
-                                                <li key={index} className="flex space-x-2 items-center bg-blue-100 p-1 w-fit rounded-lg ">
-                                                    <span className=''>{tag}</span>
-                                                    <XMarkIcon className='w-4 h-4 p-[2px] cursor-pointer rounded-full bg-white' onClick={() => removeTags(index)}/>
-                                                </li>
-                                            
-                                        ))}
-                                       </ul>
-                                       {/* <input type="text" placeholder='Press enter to add tags' onKeyUp={addTags}/> */}
-                                     
-                                    </div>
+                                    
                                     {/* <div className="mt-2">
                                         <textarea ref={captionRef}
                                             className='h-28 rounded-lg outline-none focus:ring-0 w-full p-2'

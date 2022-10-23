@@ -14,7 +14,7 @@ import { ShareAtomState } from '../../atoms/ShareAtom';
 import { useRecoilState } from 'recoil';
 import { postPidState } from '../../atoms/postPidAtom';
 
-function Post({ id, img,vid, posttext, timestamp, uid, lowerUsername }) {
+function Post({ id, img,vid, posttext, timestamp, uid, lowerUsername, hashTags, atTags }) {
 
   const [commentBoxVisible, setCommentBoxVisible] = useState<boolean>(false)
   const [user] = useAuthState(auth);
@@ -29,6 +29,8 @@ function Post({ id, img,vid, posttext, timestamp, uid, lowerUsername }) {
   const userRef = collection(db, "users");
   const [shareOpen, setShareOpen] = useRecoilState(ShareAtomState)
   const [postPidValue, setPostPidValue] = useRecoilState(postPidState)
+  const [searchUser, setSearchUser] = useState("")
+  const [value, setValue] = useState([])
 
   useEffect(() => onSnapshot(collection(db, 'posts', id, 'likes'), (snapshot) =>
     setLikes(snapshot.docs)), [db, id]
@@ -66,7 +68,9 @@ function Post({ id, img,vid, posttext, timestamp, uid, lowerUsername }) {
     }
 
   }
- 
+
+  console.log(atTags)
+
   useEffect(
     () =>
       onSnapshot(query(collection(db, 'users',), where("uid", "==", uid)),
@@ -76,7 +80,17 @@ function Post({ id, img,vid, posttext, timestamp, uid, lowerUsername }) {
       ),
     [db]
   );
+  useEffect(
+    () =>
+      onSnapshot(query(collection(db, 'users',), where("lowerUsername", "==", searchUser)),
+        snapshot => {
+          setValue(snapshot.docs)
+        }
+      ),
+    [db]
+  );
 
+      
   const sendComment = async (e) => {
     e.preventDefault();
     const commenttoSend = comment;
@@ -97,7 +111,7 @@ function Post({ id, img,vid, posttext, timestamp, uid, lowerUsername }) {
      
          
         
-      <div className="mr-4  ml-4 lg:mr-2 lg:ml-2 mt-4 p-2 rounded-2xl  items-center bg-white   ">
+      <div className="mr-4  ml-4 lg:mr-2 lg:ml-2 mt-2 p-2 rounded-2xl  items-center bg-white   ">
         <div className="flex items-center ">
 
           {userinfo.map(info => {
@@ -108,7 +122,7 @@ function Post({ id, img,vid, posttext, timestamp, uid, lowerUsername }) {
                 </div>
                 <div className=" items-center">
                   <div className="flex items-center">
-                    <Link href={'/users/' + uid}>
+                    <Link href={'/users/' + info.data().slug}>
                       <a>
                         <h1 className="text-sm font-bold ml-2 hover:text-blue-500 cursor-pointer " >{info.data().username}</h1>
                       </a>
@@ -207,6 +221,44 @@ function Post({ id, img,vid, posttext, timestamp, uid, lowerUsername }) {
                     <video src={vid} controls autoPlay muted loop className="rounded-lg max-h-[34rem]" />
                   )}
 
+
+
+                  <div>
+                    {hashTags && (
+                      <div className='flex space-x-2'>
+                        {hashTags.map(tag => {
+                          return (
+                            <div key={tag.id}>
+                              {/* <Link href={'/users/' + tag}> */}
+                                {/* <a> */}
+                                  <h1 className="font-bold text-blue-500 bg-gray-100 hover:text-black cursor-pointer p-1 w-fit 00 mt-3 rounded-lg pl-2 pr-2">#{tag}</h1>
+                                {/* </a> */}
+                              {/* </Link> */}
+                            </div>
+                          )
+                        })}
+                      </div>
+                    )}
+                  </div>
+
+    <div>
+      {atTags && (
+      <div className='flex space-x-2'>
+        {atTags.map(tag => {
+        return(
+          <div key={tag.id}>
+            <Link href={'/users/' + tag}>
+              <a>
+                <h1 className="font-bold text-blue-500 bg-gray-100 hover:text-black cursor-pointer p-1 w-fit 00 mt-3 rounded-lg pl-2 pr-2">@{tag}</h1>
+              </a>
+            </Link>
+            </div>
+        )
+      })}
+      </div>
+      )}   
+    </div>
+               
                 </div>
               </div>
             </a>
@@ -243,7 +295,7 @@ function Post({ id, img,vid, posttext, timestamp, uid, lowerUsername }) {
 
             <div className="flex items-center hover:text-purple-500" >
               <ArrowsRightLeftIcon className='h-6 ' />
-              <h1 className='ml-2'>3.1K</h1>
+              <h1 className='ml-2'>0</h1>
             </div>
 
 

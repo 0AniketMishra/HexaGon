@@ -29,7 +29,7 @@ function StoryModal() {
         toast.success('Story Uploaded Successfully! 🎉', {
             id: refreshToast
         })
-        db.collection('stories').doc(user.uid).set({
+        db.collection('stories').doc(user.displayName.replace(/\s+/g, '').toLowerCase()).set({
             email: user.email,
             lastSeen: firebase.firestore.FieldValue.serverTimestamp(),
             photoURL: user.photoURL,
@@ -45,7 +45,7 @@ function StoryModal() {
 
 
 
-        const docRef = await addDoc(collection(db,"stories", user.uid, "updates"), {
+        const docRef = await addDoc(collection(db, "stories", user.displayName.replace(/\s+/g, '').toLowerCase(), "updates"), {
             posttext: captionRef.current.value,
             profileImg: user.photoURL,
             timestamp: firebase.firestore.FieldValue.serverTimestamp(),
@@ -57,7 +57,7 @@ function StoryModal() {
         if (selectedFile) {
             await uploadString(imageRef, selectedFile, "data_url").then(async snapshot => {
                 const downloadURL = await getDownloadURL(imageRef)
-                await updateDoc(doc(db,"stories",user.uid, "updates",docRef.id), {
+                await updateDoc(doc(db, "stories", user.displayName.replace(/\s+/g, '').toLowerCase(), "updates",docRef.id), {
                     image: downloadURL
                 })
             });

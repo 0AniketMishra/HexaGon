@@ -34,15 +34,15 @@ function Chat() {
     e.preventDefault();
     const messagetosend = message;
     setMessage('')
-    
+   
       if(messagetosend !== "" && " "){
         setSentMessage(messagetosend)
-        await addDoc(collection(db, "userChat", selectedChat, "Contacts", user.uid, 'messages'), {
+        await addDoc(collection(db, "userChat", selectedChat, "Contacts", user.displayName.replace(/\s+/g, '').toLowerCase(), 'messages'), {
           message: messagetosend,
           timestamp: firebase.firestore.FieldValue.serverTimestamp(),
           uid: user.uid
         })
-        await addDoc(collection(db, "userChat", user.uid, "Contacts", selectedChat, 'messages'), {
+        await addDoc(collection(db, "userChat", user.displayName.replace(/\s+/g, '').toLowerCase(), "Contacts", selectedChat, 'messages'), {
           message: messagetosend,
           timestamp: firebase.firestore.FieldValue.serverTimestamp(),
           uid: user.uid
@@ -55,7 +55,7 @@ function Chat() {
 
   }
  
-   onSnapshot(query(collection(db, 'userChat', user.uid, "Contacts", selectedChat, "messages"), orderBy('timestamp')),
+  onSnapshot(query(collection(db, 'userChat', user.displayName.replace(/\s+/g, '').toLowerCase(), "Contacts", selectedChat, "messages"), orderBy('timestamp')),
         snapshot => {
           setSentMessages(snapshot.docs)
         }
@@ -74,7 +74,7 @@ function Chat() {
 
     })()
    
-  ref.current?.scrollIntoView({ behaviour: "smooth" })
+
 
   return (
     <div className=''>
@@ -120,7 +120,7 @@ function Chat() {
                   )
                 })}
                {sentMessage !== "" &&(
-                  <div className='flex justify-end'>
+                  <div className='flex justify-end mt-2'>
                     <h1 className='w-fit p-1 rounded-xl max-w-[50%] pl-2 pr-2 text-white font-bold  mr-4 mt-2 bg-blue-800   '>{sentMessage}</h1>
                   </div>
                )}

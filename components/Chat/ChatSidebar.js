@@ -20,7 +20,7 @@ function ChatSidebar() {
 
   useEffect(
     () =>
-      onSnapshot(query(collection(db, 'userChat', user.uid, "Contacts")),
+      onSnapshot(query(collection(db, 'userChat', user.displayName.replace(/\s+/g, '').toLowerCase(), "Contacts")),
         snapshot => {
           setContacts(snapshot.docs)
         }
@@ -37,7 +37,7 @@ function ChatSidebar() {
         <div className='h-[72vh]'>
           {contacts.map(contact => {
             return (
-              <div key={contact.id} onClick={() => setSelctedChat(contact.data().uid)} className='flex cursor-pointer rounded-lg mb-4 ml-2 mr-2 p-2  hover:bg-gray-100 items-center'>
+              <div key={contact.id} onClick={() => setSelctedChat(contact.data().username.replace(/\s+/g, '').toLowerCase())} className='flex cursor-pointer rounded-lg mb-4 ml-2 mr-2 p-2  hover:bg-gray-100 items-center'>
                 <div>
                   <img src={contact.data().photoURL} alt="" className=' border p-[1px] mt-2  bg-white w-12 h-12 rounded-full ' />
                 </div>
