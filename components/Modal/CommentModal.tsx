@@ -9,12 +9,14 @@ import { auth, db } from '../../firebase'
 import { postIDAtom } from '../../atoms/postIDAtom'
 import firebase from '@firebase/app-compat';
 import { useAuthState } from 'react-firebase-hooks/auth'
+import { replyingAtom } from '../../atoms/replyingAtom'
 
 function CommentModal() {
     const [user] = useAuthState(auth);
     const [Open, setOpen] = useRecoilState(commentModalState)
     const [comment, setComment] = useState("");
     const [PostID, setID] = useRecoilState(postIDAtom)
+    const [reply, setReply] = useRecoilState(replyingAtom)
 
     const sendComment = async (e) => {
         e.preventDefault();
@@ -66,8 +68,11 @@ function CommentModal() {
                                   >
                                       Compose a Reply
                                   </Dialog.Title>
-                                  <div className="mt-2">
-                                    <h1>Replying to </h1>
+                                  <div className="mt-2 ">
+                                   <div className="flex items-center space-x-1">
+                                          <h1>Replying to </h1>
+                                          <h1 className='text-blue-500'>{reply}</h1>
+                                   </div>
                                       <form action="" className="flex items-center p-2 mt-4 bg-gray-100 mb-2 ml-2 mr-2 rounded-xl">
                 <FaceSmileIcon className='h-6' />
                 <input

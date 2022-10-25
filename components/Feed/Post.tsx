@@ -16,6 +16,8 @@ import { postPidState } from '../../atoms/postPidAtom';
 import { commentModalState } from '../../atoms/commentModalState';
 import { postIDAtom } from '../../atoms/postIDAtom';
 import { userInfo } from 'os';
+import { replyingAtom } from '../../atoms/replyingAtom';
+import { info } from 'console';
 
 function Post({ id, img,vid, posttext, timestamp, uid, lowerUsername, hashTags, atTags }) {
 
@@ -36,7 +38,7 @@ function Post({ id, img,vid, posttext, timestamp, uid, lowerUsername, hashTags, 
   const [searchUser, setSearchUser] = useState("")
   const [value, setValue] = useState([])
   const [PostID, setID] = useRecoilState(postIDAtom)
-
+  const [reply, setReply] = useRecoilState(replyingAtom)
   useEffect(() => onSnapshot(collection(db, 'posts', id, 'likes'), (snapshot) =>
     setLikes(snapshot.docs)), [db, id]
   )
@@ -366,13 +368,18 @@ function Post({ id, img,vid, posttext, timestamp, uid, lowerUsername, hashTags, 
             </div>
 
 
-            <div className="flex items-center hover:text-purple-500" onClick={() => {
-             setOpen(true);
-             setID(id)
-            }}>
-              <ArrowsRightLeftIcon className='h-6  cursor-pointer' />
-              {/* <h1 className='ml-2'>0</h1> */}
-            </div>
+           {userinfo.map(info => {
+            return(
+              <div  key={info.id} className="flex items-center hover:text-purple-500" onClick={() => {
+                setOpen(true);
+                setID(id)
+                setReply(info.data().lowerUsername)
+              }}>
+                <ArrowsRightLeftIcon className='h-6  cursor-pointer' />
+                {/* <h1 className='ml-2'>0</h1> */}
+              </div>
+            )
+           })}
 
 
 

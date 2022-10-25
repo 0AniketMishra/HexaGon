@@ -13,6 +13,13 @@ import Moment from 'react-moment'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import toast from 'react-hot-toast'
 import firebase from '@firebase/app-compat';
+import { useRecoilState } from 'recoil'
+import { commentModalState } from '../../atoms/commentModalState'
+import { postIDAtom } from '../../atoms/postIDAtom'
+import { replyingAtom } from '../../atoms/replyingAtom'
+import CommentModal from '../../components/Modal/CommentModal'
+import { ShareAtomState } from '../../atoms/ShareAtom'
+import ShareModal from '../../components/Modal/ShareModal'
 
 const SinglePost = () => {
 
@@ -33,6 +40,12 @@ const SinglePost = () => {
     const [comments, setComments] = useState([])
     const [hashtag, setHashTag] = useState([]);
     const [atTag, setAtTag] = useState([])
+    const [lowerUsername, setLowerUsername] = useState("")
+    const [postID, setPostID] = useState("")
+    const [Open, setOpen] = useRecoilState(commentModalState)
+    const [PostID, setID] = useRecoilState(postIDAtom)
+    const [reply, setReply] = useRecoilState(replyingAtom)
+    const [shareOpen, setShareOpen] = useRecoilState(ShareAtomState)
 
     useEffect(() => {
         ; (async () => {
@@ -47,6 +60,8 @@ const SinglePost = () => {
             const video = snapshots.data().video
             const hashTag = snapshots.data().hashTags
             const atTag2 = snapshots.data().atTags
+            const lowerUsername = snapshots.data().lowerUsername
+            const postID = snapshots.data().postId
             setUid(uid)
             setUsername(username)
             setPhotoURL(photoURL)
@@ -56,6 +71,9 @@ const SinglePost = () => {
             setVideo(video)
             setHashTag(hashTag)
             setAtTag(atTag2)
+            setLowerUsername(lowerUsername)
+            setPostID(postID)
+
 
 
         })()
@@ -115,7 +133,8 @@ const SinglePost = () => {
 
       <div className='bg-gray-100 h-screen overflow-y-scroll scrollbar-hide'>
           <Header />
-          
+          <CommentModal/>
+          <ShareModal/>
                   <main className='grid grid-cols-1  lg:grid-cols-12 lg:max-w-7xl mx-auto' >
                       <section className='lg:col-span-3 md:col-span-0 hidden lg:inline-flex'>
                           <div className="fixed top-20">
@@ -277,7 +296,7 @@ const SinglePost = () => {
 
 
 
-                          <div className=" mt-4 p-1 flex space-x-8 ml-8  justify-evenly  mr-8 mb-4">
+                          <div className=" mt-4 p-1 flex space-x-8 lg:ml-8  justify-evenly  lg:mr-8 mb-4">
                               <div className=" items-center hover:text-red-500  cursor-pointer ">
                                   {hasLiked ? (
                                       <div className='flex' onClick={likePost}>
@@ -300,14 +319,21 @@ const SinglePost = () => {
                               </div>
 
 
-                              <div className="flex items-center hover:text-purple-500" >
-                                  <ArrowsRightLeftIcon className='h-6 ' />
-                                  <h1 className='ml-2'>3.2K</h1>
+                              <div className="flex items-center hover:text-purple-500" onClick={() => {
+                                  setOpen(true);
+                                  setID(postID)
+                                  setReply(lowerUsername)
+                              }}>
+                                  <ArrowsRightLeftIcon className='h-6 cursor-pointer' />
+                                 
                               </div>
 
 
 
-                              <ShareIcon className='h-6   hover:text-green-500' />
+                              <ShareIcon className='h-6   hover:text-green-500 cursor-pointer' onClick={() => {
+                                  setShareOpen(true);
+                                  setID(postID)
+                              }} />
                           </div>
                       </div>
 
