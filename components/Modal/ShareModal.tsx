@@ -5,11 +5,12 @@ import { ShareAtomState } from '../../atoms/ShareAtom'
 import { Fragment, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { postPidState } from '../../atoms/postPidAtom'
+import { postIDAtom } from '../../atoms/postIDAtom'
 
 function ShareModal() {
     const [shareOpen, setShareOpen] = useRecoilState(ShareAtomState)
-    const [postPidValue, setPostPidValue] = useRecoilState(postPidState)
-    const [link, setLink] = useState("https://hexa-gon.vercel.app/"+postPidValue)
+    const [PostID, setID] = useRecoilState(postIDAtom)
+    const [link, setLink] = useState("https://hexa-gon.vercel.app/posts/")
   return (
     <div>
           
@@ -51,10 +52,10 @@ function ShareModal() {
                                      </div>
                                      <div className="flex border w-fit rounded-lg mt-2 mb-2 items-center">
                                         <div className=' '>
-                                              <h1 className='pl-2 pr-2 truncate w-64'>{link}</h1>
+                                              <h1 className='pl-2 pr-2 truncate w-64'>{link+PostID}</h1>
                                         </div>
                                         <div>
-                                              <button onClick={() => { navigator.clipboard.writeText(link) }} className='bg-blue-900 h-8 text-white font-bold rounded-lg p-1 '>Copy</button>
+                                              <button onClick={() => { navigator.clipboard.writeText(link+PostID) }} className='bg-blue-900 h-8 text-white font-bold rounded-lg p-1 '>Copy</button>
                                         </div>
                                      </div>
                                   </div>

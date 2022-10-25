@@ -12,6 +12,7 @@ import { collection, onSnapshot, query } from 'firebase/firestore'
 import { db } from '../firebase'
 import ShareModal from '../components/Modal/ShareModal'
 import Sidebar from '../components/Common/Sidebar'
+import CommentModal from '../components/Modal/CommentModal'
 
 
 function Home() {
@@ -44,6 +45,7 @@ function Home() {
       <StoryModal />
       <CustomizeModal/>
       <ShareModal/>
+      <CommentModal/>
       <Modal />
        
         <Toaster

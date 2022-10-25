@@ -16,7 +16,7 @@ function Feed() {
         </div>
       </section>
 
-      <section className="lg:col-span-6 md:col-span-7 lg:ml-6  lg:mr-6 mt-6 rounded-lg">
+      <section className="lg:col-span-6 md:col-span-7 lg:ml-4  lg:mr-4 mt-6 rounded-lg">
         <Stories />
         <Posts />
       </section>

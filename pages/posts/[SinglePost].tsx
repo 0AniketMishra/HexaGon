@@ -242,7 +242,7 @@ const SinglePost = () => {
                                           {video && (
                                               <video src={video} controls autoPlay muted loop className="rounded-lg max-h-[34rem]" />
                                           )}
-                                  {hashtag.map(tag => {
+                                  {hashtag?.map(tag => {
                                       return (
                                           <div key={tag.id}>
                                               <Link href={'/users/' + tag}>
@@ -253,17 +253,20 @@ const SinglePost = () => {
                                           </div>
                                       )
                                   })}
-                                 {atTag.map(tag => {
-                                      return (
-                                          <div key={tag.id}>
-                                              <Link href={'/users/' + tag}>
-                                                  <a>
-                                                      <h1 className="font-bold text-blue-500 bg-gray-100 hover:text-black cursor-pointer p-1 w-fit 00 mt-3 rounded-lg pl-2 pr-2">@{tag}</h1>
-                                                  </a>
-                                              </Link>
-                                          </div>
-                                      )
-                                  })}
+                               
+                                      {atTag?.map(tag => {
+                                              return (
+                                                  <div key={tag.id}>
+                                                      <Link href={'/users/' + tag}>
+                                                          <a>
+                                                              <h1 className="font-bold text-blue-500 bg-gray-100 hover:text-black cursor-pointer p-1 w-fit 00 mt-3 rounded-lg pl-2 pr-2">@{tag}</h1>
+                                                          </a>
+                                                      </Link>
+                                                  </div>
+                                              )
+                                          })
+                                      }
+                               
                                       </div>
                                   </div>
                               

@@ -28,9 +28,9 @@ const [users, setUsers] = useState([])
   return (
    <div>
      
-      <div className='mr-4 ml-4 lg:mr-2 lg:ml-2 p-2 rounded-2xl  mb-6 scrollbar-hide overflow-x-scroll  bg-white' >
+      <div className='mr-2 ml-2 lg:mr-2 lg:ml-2 p-2 rounded-2xl  mb-6 scrollbar-hide overflow-x-scroll  bg-white' >
 
-        <h1 className='font-bold text-lg mb-4'># Stories</h1>
+        <h1 className='font-bold text-lg mb-2'># Stories</h1>
         <div className="flex   ">
 
           <div className='flex space-x-6 '>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { ArrowsRightLeftIcon, ChatBubbleOvalLeftEllipsisIcon, EllipsisHorizontalIcon, FaceSmileIcon, HeartIcon, ShareIcon } from '@heroicons/react/24/outline'
+import { ArrowsRightLeftIcon, ChatBubbleOvalLeftEllipsisIcon, EllipsisHorizontalIcon, FaceSmileIcon, HeartIcon, PencilIcon, ShareIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { onSnapshot, collection, addDoc, doc, deleteDoc, setDoc, query, orderBy, where, getDocs } from '@firebase/firestore'
 import { db } from '../../firebase';
 import firebase from '@firebase/app-compat';
@@ -13,6 +13,9 @@ import toast from 'react-hot-toast'
 import { ShareAtomState } from '../../atoms/ShareAtom';
 import { useRecoilState } from 'recoil';
 import { postPidState } from '../../atoms/postPidAtom';
+import { commentModalState } from '../../atoms/commentModalState';
+import { postIDAtom } from '../../atoms/postIDAtom';
+import { userInfo } from 'os';
 
 function Post({ id, img,vid, posttext, timestamp, uid, lowerUsername, hashTags, atTags }) {
 
@@ -29,8 +32,10 @@ function Post({ id, img,vid, posttext, timestamp, uid, lowerUsername, hashTags, 
   const userRef = collection(db, "users");
   const [shareOpen, setShareOpen] = useRecoilState(ShareAtomState)
   const [postPidValue, setPostPidValue] = useRecoilState(postPidState)
+  const [Open, setOpen] = useRecoilState(commentModalState)
   const [searchUser, setSearchUser] = useState("")
   const [value, setValue] = useState([])
+  const [PostID, setID] = useRecoilState(postIDAtom)
 
   useEffect(() => onSnapshot(collection(db, 'posts', id, 'likes'), (snapshot) =>
     setLikes(snapshot.docs)), [db, id]
@@ -68,6 +73,7 @@ function Post({ id, img,vid, posttext, timestamp, uid, lowerUsername, hashTags, 
     }
 
   }
+  
 
   console.log(atTags)
 
@@ -103,6 +109,12 @@ function Post({ id, img,vid, posttext, timestamp, uid, lowerUsername, hashTags, 
 
     })
   }
+  const deleteComment = async (e) => {
+    e.preventDefault();
+   {comments.map(async comment => {
+     await deleteDoc(doc(db, 'posts', id, 'comments', comment.id));
+   })}
+  }
   function classNames(...classes) {
     return classes.filter(Boolean).join(' ')
   }
@@ -111,7 +123,7 @@ function Post({ id, img,vid, posttext, timestamp, uid, lowerUsername, hashTags, 
      
          
         
-      <div className="mr-4  ml-4 lg:mr-2 lg:ml-2 mt-2 p-2 rounded-2xl  items-center bg-white   ">
+      <div className="mr-2  ml-2 lg:mr-2 lg:ml-2 mt-2 p-2 rounded-2xl  items-center bg-white   ">
         <div className="flex items-center ">
 
           {userinfo.map(info => {
@@ -214,52 +226,54 @@ function Post({ id, img,vid, posttext, timestamp, uid, lowerUsername, hashTags, 
           <Link href={'/posts/' + id}>
             <a>
               <div className="ml-4  mt-2 md:mr-4 ">
-                <h1 className="lg:w-[90%] mb-4 mt-4 ml-4 text-lg ">{posttext}</h1>
+                <h1 className="lg:w-[90%] mb-2 mt-4 ml-4 text-lg ">{posttext}</h1>
                 <div className="flex items-center space-x-4 p-2 justify-left" >
                   <img src={img} alt="" className='max-h-96 rounded-lg ' />
                   {vid && (
                     <video src={vid} controls autoPlay muted loop className="rounded-lg max-h-[34rem]" />
                   )}
+                  
 
 
 
-                  <div>
-                    {hashTags && (
-                      <div className='flex space-x-2'>
-                        {hashTags.map(tag => {
-                          return (
-                            <div key={tag.id}>
-                              {/* <Link href={'/users/' + tag}> */}
-                                {/* <a> */}
-                                  <h1 className="font-bold text-blue-500 bg-gray-100 hover:text-black cursor-pointer p-1 w-fit 00 mt-3 rounded-lg pl-2 pr-2">#{tag}</h1>
-                                {/* </a> */}
-                              {/* </Link> */}
-                            </div>
-                          )
-                        })}
-                      </div>
-                    )}
-                  </div>
 
-    <div>
-      {atTags && (
-      <div className='flex space-x-2'>
-        {atTags.map(tag => {
-        return(
-          <div key={tag.id}>
-            <Link href={'/users/' + tag}>
-              <a>
-                <h1 className="font-bold text-blue-500 bg-gray-100 hover:text-black cursor-pointer p-1 w-fit 00 mt-3 rounded-lg pl-2 pr-2">@{tag}</h1>
-              </a>
-            </Link>
-            </div>
-        )
-      })}
-      </div>
-      )}   
-    </div>
+  
+                  
+  
                
                 </div>
+               <div className="ml-4">
+                  {hashTags && (
+                    <div className='flex overflow-y-scroll space-x-2 scrollbar-hide'>
+                      {hashTags.map(tag => {
+                        return (
+                          <ul key={tag.id}>
+                            <Link href={'/users/' + tag}>
+                              <a>
+                                <h1 className="font-bold text-blue-500 bg-gray-100 hover:text-black cursor-pointer p-1 w-fit 00 mt-3 rounded-lg pl-2 pr-2">@{tag}</h1>
+                              </a>
+                            </Link>
+                          </ul>
+                        )
+                      })}
+                    </div>
+                  )}{atTags && (
+                    <div className='flex overflow-y-scroll space-x-2 scrollbar-hide'>
+                      {atTags.map(tag => {
+                        return (
+                          <div key={tag.id} className="">
+                            <Link href={'/users/' + tag}>
+                              <a>
+                                <h1 className="font-bold text-blue-500 bg-gray-100 hover:text-black cursor-pointer p-1 w-fit  mt-3 rounded-lg pl-2 pr-2">@{tag}</h1>
+                              </a>
+                            </Link>
+                          </div>
+                        )
+                      })}
+                    </div>
+                  )}
+               </div>
+                
               </div>
             </a>
           </Link>
@@ -267,10 +281,69 @@ function Post({ id, img,vid, posttext, timestamp, uid, lowerUsername, hashTags, 
 
 
         <div >
+          {commentBoxVisible && (
+            <div>
+              
+               
+              {comments.length > 0 && (
+                <div>
+                  
+                  {/* <h1 className='font-bold  mb-4 mt-4 text-lg ml-2'>Comments - </h1> */}
+                  <div className='ml-2 items-center mt-6 h-46 overflow-y-scroll scrollbar-hide'>
+                    {comments.map(comment => (
+                      <div key={comment.id} className=" space-x-2 mb-3 " >
+                      
+                        <div className="flex items-center ">
+                          <img src={comment.data().userImage} alt="" className='h-7 border  rounded-full' />
+                         <div>
+                          
+                          <div className="flex items-center space-x-2">
+                            
+                              <span className="font-bold text-md  ml-2">{comment.data().username + " : "}</span>
+                              <Moment className="text-xs mr-6" fromNow >{comment.data().timestamp?.toDate()}</Moment>
+                          </div>
+                          <div>
+                              {userinfo.map(info => {
+                                return (
+
+                                  <div className='ml-2 flex space-x-1'>
+                                    <span className="font-semibold text-sm">Replying To</span>
+                                    <span className="font-semibold text-sm text-blue-400">{info.data().lowerUsername}</span>
+                                  </div>
+
+                                )
+                              })}
+                          </div>
+                         </div>
+                          <h1 className="flex-1"></h1>
+                          {/* <Moment className="text-xs mr-6" fromNow>{comment.data().timestamp?.toDate()}</Moment> */}
+                           {comment.data().uid === user.uid &&(
+                            <TrashIcon className='w-4 mr-2 cursor-pointer' onClick={deleteComment}/>
+                           )}
+                          <EllipsisHorizontalIcon className='w-4 mr-10'/>
+                        </div>
+                        <p className=" spacex-2 px-6">{comment.data().comment}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {/* <form action="" className="flex items-center p-2 mt-4 bg-gray-100 mb-2 ml-2 mr-2 rounded-xl">
+                <FaceSmileIcon className='h-6' />
+                <input
+                  type="text"
+                  value={comment}
+                  onChange={e => setComment(e.target.value)}
+                  placeholder='Add a comment...'
+                  className='border-none flex-1 focus:ring-0 outline-none ml-2 bg-gray-100'
+                />
+                <button disabled={!comment.trim()} type="submit" onClick={sendComment} className="font-semibold text-blue-400 ">Post </button>
+              </form> */}
+            </div>
+          )}
 
 
-
-          <div className=" mt-4 p-1 flex space-x-8 ml-8  justify-evenly  mr-8 mb-4">
+          <div className=" mt-4 p-1 flex space-x-8 lg:ml-8  justify-evenly  lg:mr-8 mb-4">
             <div className=" items-center hover:text-red-500  cursor-pointer ">
               {hasLiked ? (
                 <div className='flex' onClick={likePost}>
@@ -293,54 +366,26 @@ function Post({ id, img,vid, posttext, timestamp, uid, lowerUsername, hashTags, 
             </div>
 
 
-            <div className="flex items-center hover:text-purple-500" >
-              <ArrowsRightLeftIcon className='h-6 ' />
-              <h1 className='ml-2'>0</h1>
+            <div className="flex items-center hover:text-purple-500" onClick={() => {
+             setOpen(true);
+             setID(id)
+            }}>
+              <ArrowsRightLeftIcon className='h-6  cursor-pointer' />
+              {/* <h1 className='ml-2'>0</h1> */}
             </div>
 
 
 
             <ShareIcon className='h-6   hover:text-green-500 cursor-pointer' onClick={() => {
-              setPostPidValue(id);
-              setShareOpen(true)
+              setShareOpen(true);
+              setID(id)
             }} />
           </div>
+
+
         </div>
 
-        {commentBoxVisible && (
-          <div>
-            <form action="" className="flex items-center p-2 mt-4  mb-2">
-              <FaceSmileIcon className='h-7' />
-              <input
-                type="text"
-                value={comment}
-                onChange={e => setComment(e.target.value)}
-                placeholder='Add a comment...'
-                className='border-none flex-1 focus:ring-0 outline-none ml-2'
-              />
-              <button disabled={!comment.trim()} type="submit" onClick={sendComment} className="font-semibold text-blue-400">Post </button>
-            </form>
-
-            {comments.length > 0 && (
-              <div>
-                {/* <h1 className='font-bold  mb-4 mt-4 text-lg ml-2'>Comments - </h1> */}
-                <div className='ml-2 items-center mt-6 h-46 overflow-y-scroll  scrollbar-hide'>
-                  {comments.map(comment => (
-                    <div key={comment.id} className=" space-x-2 mb-3 " >
-                      <div className="flex items-center ">
-                        <img src={comment.data().userImage} alt="" className='h-7 border  rounded-full' />
-                        <span className="font-bold text-sm ml-2">{comment.data().username + " : "}</span>
-                        <h1 className="flex-1"></h1>
-                        <Moment className="text-xs mr-6" fromNow>{comment.data().timestamp?.toDate()}</Moment>
-                      </div>
-                      <p className=" spacex-2 px-6">{comment.data().comment}</p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-          </div>
-        )}
+       
       </div>
        
     </div>

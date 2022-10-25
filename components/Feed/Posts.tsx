@@ -12,6 +12,7 @@ function Posts() {
   const [stories, setStories] = useState([])
   const [storyID, setStoryID] = useState([])
 
+
   useEffect(
     () => 
  onSnapshot(query(collection(db, 'posts'), orderBy('timestamp', 'desc')),
@@ -30,6 +31,10 @@ function Posts() {
       ),
     [db]
   );
+  
+
+
+
 
   const sendComment = async (e) => {
     e.preventDefault()
