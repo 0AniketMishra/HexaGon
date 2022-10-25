@@ -306,7 +306,7 @@ function Post({ id, img,vid, posttext, timestamp, uid, lowerUsername, hashTags, 
                               {userinfo.map(info => {
                                 return (
 
-                                  <div className='ml-2 flex space-x-1'>
+                                  <div className='ml-2 flex space-x-1' key={info.id}>
                                     <span className="font-semibold text-sm">Replying To</span>
                                     <span className="font-semibold text-sm text-blue-400">{info.data().lowerUsername}</span>
                                   </div>
