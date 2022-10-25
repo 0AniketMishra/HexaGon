@@ -250,7 +250,7 @@ function Post({ id, img,vid, posttext, timestamp, uid, lowerUsername, hashTags, 
                           <ul key={tag.id}>
                             <Link href={'/users/' + tag}>
                               <a>
-                                <h1 className="font-bold text-blue-500 bg-gray-100 hover:text-black cursor-pointer p-1 w-fit 00 mt-3 rounded-lg pl-2 pr-2">@{tag}</h1>
+                                <h1 className="font-bold text-blue-500 bg-gray-100 hover:text-black cursor-pointer p-1 w-fit 00 mt-3 rounded-lg pl-2 pr-2">#{tag}</h1>
                               </a>
                             </Link>
                           </ul>
