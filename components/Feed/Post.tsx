@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { ArrowsRightLeftIcon, ChatBubbleOvalLeftEllipsisIcon, EllipsisHorizontalIcon, FaceSmileIcon, HeartIcon, PencilIcon, ShareIcon, TrashIcon } from '@heroicons/react/24/outline'
+import { ArrowsRightLeftIcon, ChatBubbleOvalLeftEllipsisIcon, EllipsisHorizontalIcon, FaceSmileIcon, HeartIcon, InformationCircleIcon, PencilIcon, ShareIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { onSnapshot, collection, addDoc, doc, deleteDoc, setDoc, query, orderBy, where, getDocs } from '@firebase/firestore'
 import { db } from '../../firebase';
 import firebase from '@firebase/app-compat';
@@ -228,7 +228,7 @@ function Post({ id, img,vid, posttext, timestamp, uid, lowerUsername, hashTags, 
           <Link href={'/posts/' + id}>
             <a>
               <div className="ml-4  mt-2 md:mr-4 ">
-                <h1 className="lg:w-[90%] mb-2 mt-4 ml-4 text-lg ">{posttext}</h1>
+                <h1 className="lg:w-[90%] mb-2 mt-4 ml-4 text-lg font-medium ">{posttext}</h1>
                 <div className="flex items-center space-x-4 p-2 justify-left" >
                   <img src={img} alt="" className='max-h-96 rounded-lg ' />
                   {vid && (
@@ -275,8 +275,23 @@ function Post({ id, img,vid, posttext, timestamp, uid, lowerUsername, hashTags, 
                     </div>
                   )}
                </div>
+              
                 
               </div>
+              <div className='flex items-center space-x-1 justify-end m-2'>
+                <InformationCircleIcon className="w-5 h-5 cursor-pointer"  />
+              </div>
+          {/* <div className='flex border-b border-t space-x-6 ml-8'>
+                 <div className='flex space-x-1 items-center'>
+                  <h1 className='font-bold'>{comments.length}</h1>
+                  <h1>Replies</h1>
+                  </div>
+                <div className='flex space-x-1 items-center'>
+                  <h1 className='font-bold'>{likes.length}</h1>
+                  <h1>Likes</h1>
+                </div>
+                 
+              </div> */}
             </a>
           </Link>
         </div>
@@ -345,7 +360,7 @@ function Post({ id, img,vid, posttext, timestamp, uid, lowerUsername, hashTags, 
           )}
 
 
-          <div className=" mt-4 p-1 flex space-x-8 lg:ml-8  justify-evenly  lg:mr-8 mb-4">
+          <div className=" mt-2 p-1 flex space-x-8 lg:ml-8  justify-evenly  lg:mr-8 mb-2">
             <div className=" items-center hover:text-red-500  cursor-pointer ">
               {hasLiked ? (
                 <div className='flex' onClick={likePost}>

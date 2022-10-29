@@ -40,7 +40,7 @@ function CustomizeModal() {
         })
 
         setLoading(true)
-        const docRef = await updateDoc(doc(db, "users", pidValue), {
+        const docRef = await updateDoc(doc(db, "users", user.displayName.replace(/\s+/g, '').toLowerCase()), {
             username: username,
             about: about
         }
