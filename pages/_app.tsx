@@ -7,17 +7,17 @@ import { useEffect, useState } from 'react';
 import Login from './login';
 import { RecoilRoot } from "recoil"
 import Loading from '../components/Common/Loading';
-import { collection, doc } from 'firebase/firestore';
+import { collection, doc, onSnapshot, query, where } from 'firebase/firestore';
 
 function MyApp({ Component, pageProps }: any) {
 
   const [exists, setExists] = useState(false)
   const [user, loading] = useAuthState(auth)
-  const doesDocExist = (docID) => {
-    return db.collection("users").doc(user.uid).get().then((doc) => {
-       setExists(true)
-    })
-  }
+  const [info, setUserInfo] = useState([])
+
+ 
+
+  
   useEffect(() => {
     if (user && exists===false) {
       db.collection('users').doc(user.displayName.replace(/\s+/g,'').toLowerCase()).set({
