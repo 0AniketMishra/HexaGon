@@ -8,37 +8,42 @@ import { collection, onSnapshot, orderBy, query, where } from 'firebase/firestor
 import { auth, db } from '../../firebase'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import Stories from 'react-insta-stories';
+import { Navigation } from "swiper";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/navigation";
+import { postPidState } from '../../atoms/postPidAtom'
 
-function StoryPopupModal({id}) {
+function StoryPopupModal() {
     const [user] = useAuthState(auth);
     const [Open, setOpen] = useRecoilState(StoryModalAtomState)
     const [selectedStory, setSelectedStory] = useRecoilState(SelectedStoryAtom)
     const [data, setData] = useState([])
     const [storyID, setStoryID] = useState([])
     const [storyImage ,setStoryImage] = useState([])
+    const [info, setInfo] = useState([])
 
    
+   
+ 
+            onSnapshot(query(collection(db, 'stories'), where("slug", "==", selectedStory)),
+                snapshot => {
+                    setInfo(snapshot.docs)
+                }
+            ),
+       
 
-
-    useEffect(() => onSnapshot(query(collection(db, 'stories', id, 'updates')), (snapshot) =>
-        setData(snapshot.docs)), [db, id]
-    )
+ onSnapshot(query(collection(db, 'stories', selectedStory, 'updates')), (snapshot) =>
+        setData(snapshot.docs)), [db, selectedStory]
+    
 
     
- const stories = [
-  {
-    url:  "https://firebasestorage.googleapis.com/v0/b/pentagon-89b4a.appspot.com/o/posts%2FfdHvrocpeXg6z5gdPmaP%2Fimage?alt=media&token=82355200-cfd7-41a3-b8c6-8195d5c81e12", 
-    duration:3000 
-},
- {
-   url:  'https://th.bing.com/th/id/OIP.MBLGS3hfrLkuT5PoZ62msgHaEK?pid=ImgDet&rs=1',
-   duration:3000
- }
-    ]
+
 
   return (
     <div>
         
+         
 
           <Transition appear show={Open} as={Fragment}>
               <Dialog as="div" className="relative z-10" onClose={() => setOpen(false)}>
@@ -55,7 +60,7 @@ function StoryPopupModal({id}) {
                   </Transition.Child>
 
                   <div className="fixed inset-0 overflow-y-auto">
-                      <div className="flex min-h-full items-center pt-20 justify-center  text-center">
+                      <div className="flex min-h-full items-center justify-center p-4 text-center">
                           <Transition.Child
                               as={Fragment}
                               enter="ease-out duration-300"
@@ -65,33 +70,60 @@ function StoryPopupModal({id}) {
                               leaveFrom="opacity-100 scale-100"
                               leaveTo="opacity-0 scale-95"
                           >
-                              <Dialog.Panel className=" max-w-md transform overflow-hidden rounded-2xl bg-white  text-left align-end shadow-xl transition-all">
-                                  {/* <Dialog.Title
-                                      as="h3"
-                                      className="text-lg font-medium leading-6 text-gray-900"
-                                  >
-                                      {selectedStory}
-                                  </Dialog.Title> */}
-                                  <div className=" ">
-                                      <Stories
-                                          stories={stories}
-                                          defaultInterval={6000}
-                                          width={300}
-                                          height={500}
-                                          loop={true}
-                                      />
-                                      </div>
-                                 
+                              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white  text-left align-middle shadow-xl transition-all">
+                                  {info.map(info => {
+                                    return(
+                                       <div key={info.id}>
+                                            <Dialog.Title
+                                                as="h3"
+                                                className="text-lg font-medium leading-6 text-gray-900"
+                                            >
+                                                <div className='flex items-center space-x-2 p-2'>
+                                                    <img src={info.data().photoURL} className="w-10 h-10 p-[2px] border rounded-full" />
+                                                    <div className='text-sm'>
+                                                        <h1 className='font-bold'>  {info.data().username}</h1>
+                                                        <p>{info.data().lowerUsername}</p>
+                                                    </div>
+                                                </div>
+                                            </Dialog.Title>
+                                       </div>
+                                    )
+                                  })}
+                                  <div className="mt-2">
+                                      <div className="">
 
-                                  <div className="">
-                                      {/* <button
-                                          type="button"
-                                          className="inline-flex justify-center rounded-md border border-transparent bg-blue-100  text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                                          onClick={() => setOpen(false)}
-                                      >
-                                          Close
-                                      </button> */}
+                                          <Swiper
+                                              navigation={false}
+                                              modules={[Navigation]}
+                                              className="mySwiper"
+                                          >
+
+                                              {data.map(update => {
+                                                  return (
+                                                      <div key={update.id}>
+                                                          <SwiperSlide>
+                                                              {update.data().image && (
+                                                                  <img
+                                                                      className="object-fill w-fit "
+                                                                      src={update.data().image}
+                                                                      alt="image slide 1"
+                                                                  />
+                                                              )}
+                                                          </SwiperSlide>
+                                                      </div>
+                                                  )
+                                              })}
+
+
+
+
+                                          </Swiper>
+
+
+                                      </div>
                                   </div>
+
+                                 
                               </Dialog.Panel>
                           </Transition.Child>
                       </div>

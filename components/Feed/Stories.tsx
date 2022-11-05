@@ -23,7 +23,7 @@ const [users, setUsers] = useState([])
       ),
     [db]
   );
- 
+ console.log(selectedStory)
 
   return (
    <div>
@@ -37,9 +37,10 @@ const [users, setUsers] = useState([])
             {users.map(user => {
               return (
                 <div key={user.id} onClick={() => {
-                  setOpen(true)
-                  setSelectedStory(user.data().uid)
-                }} className="items-center cursor-pointer hover:scale-110 transition-all duration-150 ease-out">
+                                  setOpen(true);
+                                  setSelectedStory(user.data().slug);
+                                  
+                              }} className="items-center cursor-pointer hover:scale-110 transition-all duration-150 ease-out">
                   <img src={user.data().photoURL} alt="" className="h-14 w-14 rounded-full p-[1.5px] border-gray-400 border-2" />
                   <p className="text- w-16 truncate text-center">{user.data().username}</p>
                 </div>

@@ -28,6 +28,7 @@
     "react-tag-input-component": "^2.0.0",
     "react-twitter-embed": "^4.0.4",
     "recoil": "^0.7.5",
+    "swiper": "^8.4.4",
     "tailwind-scrollbar-hide": "^1.1.7"
   },
   "devDependencies": {
