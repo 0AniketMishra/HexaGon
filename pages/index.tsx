@@ -40,6 +40,7 @@ function Home() {
       <ShareModal/>
       <CommentModal/>
       <Modal />
+      <StoryPopupModal/>
        
         <Toaster
           position="top-center"

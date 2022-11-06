@@ -8,11 +8,12 @@ import { collection, onSnapshot, orderBy, query, where } from 'firebase/firestor
 import { auth, db } from '../../firebase'
 import { useAuthState } from 'react-firebase-hooks/auth'
 import Stories from 'react-insta-stories';
-import { Navigation } from "swiper";
+import { Navigation, autoplay, Autoplay, onReachEnd } from "swiper";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 import { postPidState } from '../../atoms/postPidAtom'
+import { ArrowLeftIcon } from '@heroicons/react/24/outline'
 
 function StoryPopupModal() {
     const [user] = useAuthState(auth);
@@ -60,7 +61,7 @@ function StoryPopupModal() {
                   </Transition.Child>
 
                   <div className="fixed inset-0 overflow-y-auto">
-                      <div className="flex min-h-full items-center justify-center p-4 text-center">
+                      <div className="flex min-h-full items-center mt-12 justify-center p-4 text-center">
                           <Transition.Child
                               as={Fragment}
                               enter="ease-out duration-300"
@@ -79,6 +80,7 @@ function StoryPopupModal() {
                                                 className="text-lg font-medium leading-6 text-gray-900"
                                             >
                                                 <div className='flex items-center space-x-2 p-2'>
+                                                    <ArrowLeftIcon className='w-6 h-6 cursor-pointer' onClick={() => setOpen(false)}/>
                                                     <img src={info.data().photoURL} className="w-10 h-10 p-[2px] border rounded-full" />
                                                     <div className='text-sm'>
                                                         <h1 className='font-bold'>  {info.data().username}</h1>
@@ -94,22 +96,38 @@ function StoryPopupModal() {
 
                                           <Swiper
                                               navigation={false}
-                                              modules={[Navigation]}
+                                              modules={[Navigation, Autoplay]}
+                                             
                                               className="mySwiper"
+                                              autoplay={{
+                                                  delay: 2500,
+                                                  disableOnInteraction: false,
+                                              }}
                                           >
 
                                               {data.map(update => {
                                                   return (
                                                       <div key={update.id}>
+                                                          {update.data().image && (
                                                           <SwiperSlide>
-                                                              {update.data().image && (
+                                                             
                                                                   <img
-                                                                      className="object-fill w-fit "
+                                                                      className="object-fill w-fit  "
                                                                       src={update.data().image}
                                                                       alt="image slide 1"
                                                                   />
-                                                              )}
+                                                              
                                                           </SwiperSlide>
+                                                          )}
+                                                          {update.data().posttext &&(
+                                                             <div className=''>
+                                                                  <SwiperSlide>
+                                                                      {update.data().posttext && (
+                                                                          <h1 className='ml-8 mr-8 h-96 text-lg font-semibold'>{update.data().posttext}</h1>
+                                                                      )}
+                                                                  </SwiperSlide>
+                                                             </div>
+                                                          )}
                                                       </div>
                                                   )
                                               })}
